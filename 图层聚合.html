@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <!--<title>要素聚合</title>-->
+    <link rel="stylesheet" href="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/js/esri/css/esri.css">
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* 让图片显示在popup中间*/
+        .esriViewPopup .gallery {
+            margin: 0 auto !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var dojoConfig = (function () {
+            var path_location = location.pathname.replace(/\/[^/]+$/, '');
+            return {
+                async: true,
+                isDebug: true,
+                packages: [{
+                    name: "App",
+                    location: path_location
+                }]
+            };
+        })();
+    </script>
+    <script src="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/init.js"></script>
+    <script>
+        var map, basmapUrl, queryLayerID = 182;
+        require([
+            "dojo/parser", "dojo/ready", "dojo/_base/array",
+            "dojo/on", "dojo/dom-style", "dojo/query",
+            "esri/Color", "esri/request",
+            "esri/graphic", "esri/geometry/Extent", "esri/symbols/SimpleMarkerSymbol",
+            "esri/symbols/SimpleFillSymbol", "esri/symbols/PictureMarkerSymbol",
+            "esri/renderers/ClassBreaksRenderer", "esri/layers/GraphicsLayer",
+            "esri/SpatialReference", "esri/dijit/PopupTemplate",
+            "esri/geometry/Point", "esri/geometry/webMercatorUtils",
+            "esri/layers/ArcGISTiledMapServiceLayer",
+            "esri/layers/ArcGISDynamicMapServiceLayer",
+            "esri/tasks/QueryTask",
+            "esri/tasks/query",
+            "App/Extras/HDSXMap",
+            "App/Extras/HDSXClusterLayer",
+            "dojo/domReady!"
+        ], function (parser, ready, arrayUtils, on, domStyle, query, Color,
+                     esriRequest, Graphic, Extent,
+                     SimpleMarkerSymbol, SimpleFillSymbol, PictureMarkerSymbol, ClassBreaksRenderer,
+                     GraphicsLayer, SpatialReference, PopupTemplate, esriPoint, webMercatorUtils, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, QueryTask, esriQuery, HDSXMap, HDSXClusterLayer) {
+            ready(function () {
+                parser.parse();
+
+                var clusterLayer;
+                var wgs = new SpatialReference({
+                    "wkid": 4326
+                });
+                var popupOptions = {
+                    "markerSymbol": new SimpleMarkerSymbol("circle", 20, null, new Color([0, 0, 0, 0.25])),
+                    "marginLeft": "20",
+                    "marginTop": "20"
+                };
+
+
+                map = new HDSXMap("map", {
+                    zoom: 12,
+                    logo: false,
+                    slider: true,
+                    sliderStyle: "large"
+                });
+                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
+                var layersRequest = esriRequest({
+                    url: basmapUrl,
+                    content: {f: "json"},
+                    handleAs: "json",
+                    callbackParamName: "callback"
+                });
+                layersRequest.then(
+                        function (response) {
+                            var isTileLayer = response.tileInfo;
+                            try {
+                                var layer = null;
+                                if (isTileLayer) {
+                                    layer = new ArcGISTiledMapServiceLayer(basmapUrl, {});
+                                }
+                                else {
+                                    layer = new ArcGISDynamicMapServiceLayer(basmapUrl, {});
+                                }
+                                if (layer) {
+                                    map.addLayer(layer);
+                                }
+                            }
+                            catch (err) {
+                                console.error("加载: " + basmapUrl + "失败!");
+                            }
+                        }, function (error) {
+                            console.log("Error: ", error.message);
+                        });
+
+
+                map.on("load", function () {
+                    //隐藏popup的“缩放到”链接
+                    domStyle.set(query("a.action.zoomTo")[0], "display", "none");
+                    var photos = esriRequest({
+                        url: "resources/DeviceJson.txt",
+                        handleAs: "json"
+                    });
+                    photos.then(addClusters, error);
+                    map.setZoom(1);
+                });
+
+
+                function addClusters(resp) {
+                    var clusterData = {};
+                    clusterData.data = arrayUtils.map(resp, function (p) {
+                        var webMercator = p.geometry;
+                        var point = new esriPoint(p.longitude, p.latitude);
+                        var webMercator = webMercatorUtils.geographicToWebMercator(point);
+                        return {
+                            "x": webMercator.x,
+                            "y": webMercator.y,
+                            "attributes": p
+                        };
+                    });
+
+                    var defaultSym = new SimpleMarkerSymbol().setSize(4);
+                    var renderer = new ClassBreaksRenderer(defaultSym, "clusterCount");
+
+                    var picBaseUrl = require.toUrl("App/resources/Images/");
+                    var blue = new PictureMarkerSymbol(picBaseUrl + "blue.png", 32, 32).setOffset(0, 15);
+                    var green = new PictureMarkerSymbol(picBaseUrl + "green.png", 64, 64).setOffset(0, 15);
+                    var red = new PictureMarkerSymbol(picBaseUrl + "red.png", 72, 72).setOffset(0, 15);
+                    var red2 = new PictureMarkerSymbol(picBaseUrl + "red.png", 120, 120).setOffset(0, 15);
+
+
+                    var cms = new PictureMarkerSymbol(picBaseUrl + "cms.png", 32, 32).setOffset(0, 15);
+                    var vd = new PictureMarkerSymbol(picBaseUrl + "vd.png", 32, 32).setOffset(0, 15);
+                    var wd = new PictureMarkerSymbol(picBaseUrl + "wd.png", 32, 32).setOffset(0, 15);
+                    var camer = new PictureMarkerSymbol(picBaseUrl + "camer.png", 32, 32).setOffset(0, 15);
+
+
+                    renderer.addBreak(0, 2, blue);
+                    renderer.addBreak(2, 5, green);
+                    renderer.addBreak(5, 10, red);
+                    renderer.addBreak(10, 20, red2);
+
+                    clusterLayer = new HDSXClusterLayer({
+                        "data": clusterData.data,
+                        "distance": 4000000,
+                        "id": "clusters",
+                        "labelColor": "#fff",
+                        "labelOffset": 10,
+                        "singleColor": "#888",
+                        "singleSymbols": {
+                            "cms": cms,
+                            "vd": vd,
+                            "wd": wd,
+                            "camer": camer
+                        }
+                    });
+
+
+                    on(clusterLayer, "click", function (obj) {
+                        var graphic = obj.graphic;
+                        if (graphic.cusIsSingle) {
+
+                        }
+                        var clustorCount = obj.graphic.attributes.clusterCount;
+                        if (clustorCount == 1) {
+                            debugger;
+                            var symbol = obj.graphic.symbol;
+                            var heitht = symbol.height;
+                            var width = symbol.width;
+                            var symbol2 = null;
+                            //如果graphic处于被选中状态，更换symbol，放大和更换图片都是对symbol操作就行了。
+                            if (graphic.isSelected) {
+                                symbol2 = new PictureMarkerSymbol(picBaseUrl + "green.png", heitht * 1.5, width * 1.5).setOffset(0, 15);
+                            } else {
+                                symbol2 = new PictureMarkerSymbol(picBaseUrl + "green.png", heitht / 1.5, width / 1.5).setOffset(0, 15);
+                            }
+                            graphic.setSymbol(symbol2);
+                            graphic.draw();
+
+                            var clusterId = obj.graphic.attributes.clusterId;
+                            var len = clusterLayer.clusterData.length;
+                            var features = arrayUtils.filter(clusterLayer.clusterData, function (item) {
+                                return item.attributes.clusterId == clusterId;
+                            });
+                            var fea = features[0];
+                            console.info("选中的要素::" + fea);
+                        }
+                    });
+
+                    clusterLayer.setRenderer(renderer);
+                    map.addLayer(clusterLayer);
+
+                    map.on("click", cleanUp);
+                    map.on("key-down", function (e) {
+                        if (e.keyCode === 27) {
+                            cleanUp();
+                        }
+                    });
+                }
+
+                function error(err) {
+                    debugger;
+                }
+
+
+                function cleanUp() {
+                    map.infoWindow.hide();
+                    clusterLayer.clearSingles();
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="map">
+</div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<style>
+    div {
+        display: block;
+    }
+
+    .BMap_stdMpPan .BMap_button {
+        height: 15px;
+        width: 15px;
+    }
+
+    .BMap_button {
+        cursor: pointer;
+    }
+
+    .BMap_panN, .BMap_panW, .BMap_panE, .BMap_panS {
+        overflow: hidden;
+    }
+
+    .BMap_panN {
+        left: 14px;
+        top: 0px;
+    }
+
+    .BMap_panW {
+        left: 1px;
+        top: 12px;
+    }
+
+    .BMap_panE {
+        left: 27px;
+        top: 12px;
+    }
+
+    .BMap_panS {
+        left: 14px;
+        top: 25px;
+    }
+
+    .BMap_stdMpPan div {
+        position: absolute;
+    }
+
+    .BMap_stdMpPan {
+        width: 44px;
+        height: 44px;
+        overflow: hidden;
+        background: url(http://webmap0.map.bdimg.com/image/api/mapctrls2d0.png) no-repeat;
+    }
+
+    /*滑动条的样式*/
+    .BMap_stdMpZoom {
+        top: 45px;
+        overflow: hidden;
+    }
+
+    .BMap_stdMpZoom .BMap_button {
+        width: 22px;
+        height: 21px;
+        left: 12px;
+        overflow: hidden;
+        background-image: url(http://webmap0.map.bdimg.com/image/api/mapctrls2d0.png);
+        background-repeat: no-repeat;
+        z-index: 10;
+    }
+
+    .BMap_stdMpSlider {
+        width: 37px;
+        top: 18px;
+    }
+
+    .BMap_stdMpSliderMask {
+        height: 100%;
+        width: 24px;
+        left: 10px;
+        cursor: pointer;
+    }
+
+    .BMap_stdMpSliderBar {
+        height: 11px;
+        width: 19px;
+        left: 13px;
+        top: 80px;
+        overflow: hidden;
+        background: url(http://webmap0.map.bdimg.com/image/api/mapctrls2d0.png) no-repeat 0 -309px;
+    }
+
+    .BMap_stdMpSliderBgTop {
+        left: 18px;
+        width: 10px;
+        overflow: hidden;
+        background: url(http://webmap0.map.bdimg.com/image/api/mapctrls2d0.png) no-repeat -23px -226px;
+    }
+
+    element.style {
+        top: 43px;
+        height: 69px;
+    }
+
+    .BMap_stdMpCtrl div {
+        position: absolute;
+    }
+
+    .BMap_stdMpSliderBgBot {
+        left: 19px;
+        height: 8px;
+        width: 10px;
+        top: 124px;
+        overflow: hidden;
+        background: url(http://webmap0.map.bdimg.com/image/api/mapctrls2d0.png) no-repeat -33px bottom;
+    }
+
+</style>
+
+<div class="BMap_stdMpCtrl"
+     style="width: 62px;height: 214px;bottom: auto;right: auto;top: 40px;left: 8px;position: absolute;z-index: 1100;">
+    <div class="BMap_stdMpPan" style="background-position: 0px 0px;">
+        <div class="BMap_button BMap_panN" title="向上平移" onclick="console.info('上')"></div>
+        <div class="BMap_button BMap_panW" title="向左平移" onclick="console.info('左')"></div>
+        <div class="BMap_button BMap_panE" title="向右平移" onclick="console.info('右')"></div>
+        <div class="BMap_button BMap_panS" title="向下平移" onclick="console.info('下')"></div>
+        <div class="BMap_stdMpPanBg BMap_smcbg"></div>
+    </div>
+
+    <div class="BMap_stdMpZoom" style="height: 147px; width: 62px;">
+        <div class="BMap_button BMap_stdMpZoomIn" title="放大一级" style="background-position: 0px -221px;">
+            <div class="BMap_smcbg"></div>
+        </div>
+        <div class="BMap_button BMap_stdMpZoomOut" title="缩小一级" style="top: 126px; background-position: 0px -265px;">
+            <div class="BMap_smcbg"></div>
+        </div>
+        <div class="BMap_stdMpSlider" style="height: 108px;">
+            <div class="BMap_stdMpSliderBgTop" style="height: 108px;">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_stdMpSliderBgBot" style="top: 25px; height: 87px;"></div>
+            <div class="BMap_stdMpSliderMask" title="放置到此级别"></div>
+            <div class="BMap_stdMpSliderBar" title="拖动缩放"
+                 style="cursor: url(http://webmap0.map.bdimg.com/image/api/openhand.cur) 8 8, default; top: 25px;">
+                <div class="BMap_smcbg"></div>
+            </div>
+        </div>
+        <div class="BMap_zlHolder">
+            <div class="BMap_zlSt">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_zlCity">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_zlProv">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_zlCountry">
+                <div class="BMap_smcbg"></div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<div class="BMap_stdMpCtrl"
+     style="width: 62px;height: 214px;bottom: auto;right: auto;top: 40px;left: 8px;position: absolute;z-index: 1100;">
+    <div class="BMap_stdMpPan" data-dojo-attach-point="mpPanContent" style="background-position: 0px 0px;">
+        <div class="BMap_button BMap_panN" title="向上平移" data-dojo-attach-point="panUpContent"
+             data-dojo-attach-event="onClick:panUp"></div>
+        <div class="BMap_button BMap_panW" title="向左平移" data-dojo-attach-point="panLeftContent"
+             data-dojo-attach-event="onClick:panLeft"></div>
+        <div class="BMap_button BMap_panE" title="向右平移" data-dojo-attach-point="panRightContent"
+             data-dojo-attach-event="onClick:panRight"></div>
+        <div class="BMap_button BMap_panS" title="向下平移" data-dojo-attach-point="panDownContent"
+             data-dojo-attach-event="onClick:panDown"></div>
+        <div class="BMap_stdMpPanBg BMap_smcbg"></div>
+    </div>
+
+    <div class="BMap_stdMpZoom" style="height: 147px; width: 62px;">
+        <div class="BMap_button BMap_stdMpZoomIn" title="放大一级" data-dojo-attach-event="onClick:zoomIn"
+             style="background-position: 0px -221px;">
+            <div class="BMap_smcbg"></div>
+        </div>
+        <div class="BMap_button BMap_stdMpZoomOut" title="缩小一级" data-dojo-attach-event="onClick:zoomOut"
+             data-dojo-attach-point="BMap_stdMpZoomOut"
+             style="top: 126px; background-position: 0px -265px;">
+            <div class="BMap_smcbg"></div>
+        </div>
+        <div class="BMap_stdMpSlider" style="height: 108px;" data-dojo-attach-point="BMap_stdMpSlider">
+            <div class="BMap_stdMpSliderBgTop" data-dojo-attach-point="BMap_stdMpSliderBgTop" style="height: 108px;">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_stdMpSliderBgBot" data-dojo-attach-point="BMap_stdMpSliderBgBot"
+                 style="top: 25px; height: 87px;"></div>
+            <div class="BMap_stdMpSliderMask" title="缩放到此级别" data-dojo-attach-point="BMap_stdMpSliderMask"
+                 data-dojo-attach-event="onClick:zoomToLevel"></div>
+            <div class="BMap_stdMpSliderBar"
+                 data-dojo-attach-point="SilderBarDiv"
+                 title="拖动缩放"
+                 style="cursor: url('resources/Cursors/openhand.cur') 8 8, default;">
+                <!--此处的url是相对于index.html页面的位置-->
+                <div class="BMap_smcbg"></div>
+            </div>
+        </div>
+        <div class="BMap_zlHolder">
+            <div class="BMap_zlSt">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_zlCity">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_zlProv">
+                <div class="BMap_smcbg"></div>
+            </div>
+            <div class="BMap_zlCountry">
+                <div class="BMap_smcbg"></div>
+            </div>
+        </div>
+    </div>
+</div>

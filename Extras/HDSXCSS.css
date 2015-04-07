@@ -1,0 +1,101 @@
+
+.BMap_stdMpPan .BMap_button {
+    height: 15px;
+    width: 15px;
+}
+
+.BMap_button {
+    cursor: pointer;
+}
+
+.BMap_panN, .BMap_panW, .BMap_panE, .BMap_panS {
+    overflow: hidden;
+}
+
+.BMap_panN {
+    left: 14px;
+    top: 0px;
+}
+
+.BMap_panW {
+    left: 1px;
+    top: 12px;
+}
+
+.BMap_panE {
+    left: 27px;
+    top: 12px;
+}
+
+.BMap_panS {
+    left: 14px;
+    top: 25px;
+}
+
+.BMap_stdMpPan div {
+    position: absolute;
+}
+
+.BMap_stdMpPan {
+    background: url("../resources/nav.png") no-repeat;
+    height: 44px;
+    overflow: hidden;
+    width: 44px;
+}
+
+/*滑动条的样式*/
+.BMap_stdMpZoom {
+    overflow: hidden;
+    top: 45px;
+}
+
+.BMap_stdMpZoom .BMap_button {
+    background-image: url("../resources/nav.png");
+    background-repeat: no-repeat;
+    height: 21px;
+    left: 12px;
+    overflow: hidden;
+    width: 22px;
+    z-index: 10;
+}
+
+.BMap_stdMpSlider {
+    top: 18px;
+    width: 37px;
+}
+
+.BMap_stdMpSliderMask {
+    cursor: pointer;
+    height: 100%;
+    left: 10px;
+    width: 24px;
+}
+
+.BMap_stdMpSliderBar {
+    background: url("../resources/nav.png") no-repeat 0 -309px;
+    height: 11px;
+    left: 13px;
+    overflow: hidden;
+    top: 80px;
+    width: 19px;
+}
+
+.BMap_stdMpSliderBgTop {
+    background: url("../resources/nav.png") no-repeat -23px -226px;
+    left: 18px;
+    overflow: hidden;
+    width: 10px;
+}
+
+.BMap_stdMpCtrl div {
+    position: absolute;
+}
+
+.BMap_stdMpSliderBgBot {
+    background: url("../resources/nav.png") no-repeat -33px bottom;
+    height: 8px;
+    left: 19px;
+    overflow: hidden;
+    top: 124px;
+    width: 10px;
+}

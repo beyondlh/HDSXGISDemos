@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>获取图层元数据信息</title>
+    <link rel="stylesheet" href="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/js/esri/css/esri.css">
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var dojoConfig = (function () {
+            var path_location = location.pathname.replace(/\/[^/]+$/, '');
+            return {
+                async: true,
+                isDebug: true,
+                packages: [{
+                    name: "App",
+                    location: path_location
+                }]
+            };
+        })();
+    </script>
+    <script src="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/init.js"></script>
+    <script>
+        var map, basmapUrl, queryLayerID = 182, mapExtent = null;
+        require([
+            "dojo/parser", "dojo/ready", "dojo/_base/array",
+            "esri/request",
+            "esri/layers/ArcGISTiledMapServiceLayer",
+            "esri/layers/ArcGISDynamicMapServiceLayer",
+            "esri/dijit/OverviewMap",
+            "esri/geometry/Extent",
+            "esri/dijit/Scalebar",
+            "esri/SpatialReference",
+            "App/extras/HDSXMap",
+            "dojo/domReady!"
+        ], function (parser, ready, arrayUtils, esriRequest, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, OverviewMap, Extent, Scalebar, SpatialReference, HDSXMap) {
+            ready(function () {
+                parser.parse();
+                map = new HDSXMap("map", {
+                    logo: false,
+                    slider: true,
+                    sliderStyle: "large"
+                });
+
+                //添加鹰眼图
+                var overviewMapDijit = new OverviewMap({
+                    map: map,
+                    visible: true,
+                    attachTo: 'bottom-right'
+                });
+                overviewMapDijit.startup();//这句不能少
+
+
+//                显示比例尺
+                var scalebar = new Scalebar({
+                    map: map,
+                    scalebarUnit: "metric"
+                });
+
+                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
+                var layersRequest = esriRequest({
+                    url: basmapUrl,
+                    content: {f: "json"},
+                    handleAs: "json",
+                    callbackParamName: "callback"
+                });
+                layersRequest.then(
+                        function (response) {
+                            try {
+                                var layer = null;
+                                if (isTileLayer) {
+                                    layer = new ArcGISTiledMapServiceLayer(basmapUrl, {});
+                                }
+                                else {
+                                    layer = new ArcGISDynamicMapServiceLayer(basmapUrl, {});
+                                }
+                                if (layer) {
+                                    map.addLayer(layer);
+                                }
+                            }
+                            catch (err) {
+                                console.error("加载: " + basmapUrl + "失败!");
+                            }
+                        }, function (error) {
+                            console.log("Error: ", error.message);
+                        });
+
+                map.on("load", function () {
+                    //3是图层ID
+                    var layersDataRequest = esriRequest({
+                        url: basmapUrl + "/3",
+                        content: {f: "json"},
+                        handleAs: "json",
+                        callbackParamName: "callback"
+                    });
+                    layersDataRequest.then(
+                            function (response) {
+                                try {
+                                    //在浏览器中输入 "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer/3"
+                                    //从response中可以得到该界面中所有的信息。
+                                }
+                                catch (err) {
+                                    console.error("加载: " + basmapUrl + "失败!");
+                                }
+                            }, function (error) {
+                                console.log("Error: ", error.message);
+                            });
+                });
+
+                function error(err) {
+                    debugger;
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+<div id="fullMap"></div>
+<div id="map">
+</div>
+</body>
+</html>
