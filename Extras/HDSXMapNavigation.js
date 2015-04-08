@@ -34,6 +34,7 @@ define([
             if (!isEsriMap) {
                 throw new Error("请传入esri map对象");
             }
+            this.maxZoomLevel = this.map.getMaxZoom();
         },
 
         postCreate: function () {
@@ -58,7 +59,7 @@ define([
         },
         startup: function () {
             this.inherited(arguments);
-            if (this.maxZoomLevel !== -1) {
+            if (this.maxZoomLevel !== null && this.maxZoomLevel >= 0) {
                 this.tileSilderBar();
             } else {
                 this.createDyanmicZoomSilder();
@@ -153,12 +154,12 @@ define([
         },
 
         createDyanmicZoomSilder: function () {
+            console.info("创建动态的");
             domStyle.set(this.SilderBarDiv, "display", "none");
             domStyle.set(this.BMap_stdMpZoomOut, "top", "18px");
             domStyle.set(this.BMap_stdMpSliderMask, "display", "none");
             domStyle.set(this.BMap_stdMpSliderBgTop, "display", "none");
             domStyle.set(this.BMap_stdMpSlider, "display", "none");
-
         }
     });
 
