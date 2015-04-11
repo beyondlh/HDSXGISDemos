@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>测距离</title>
+
+    <link rel="stylesheet" href="http://js.arcgis.com/3.10/js/esri/css/esri.css">
+    <style>
+        html, body, #mapDiv {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        #info {
+            bottom: 20px;
+            color: #444;
+            height: auto;
+            font-family: arial;
+            left: 20px;
+            margin: 5px;
+            padding: 10px;
+            position: absolute;
+            text-align: left;
+            width: 200px;
+            z-index: 40;
+        }
+
+        .label {
+            display: inline-block;
+            width: 4em;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var dojoConfig = (function () {
+            var path_location = location.pathname.replace(/\/[^/]+$/, '');
+            return {
+                async: true,
+                isDebug: true,
+                packages: [{
+                    name: "App",
+                    location: path_location
+                }]
+            };
+        })();
+    </script>
+    <script src="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/init.js"></script>
+    <script>
+        require(["dojo/dom",
+                    "dojo/_base/lang",
+                    "dojo/json",
+                    "esri/config",
+                    "esri/request",
+                    "App/Extras/HDSXMap",
+                    "esri/symbols/TextSymbol",
+                    "esri/graphic",
+                    "esri/geometry/Geometry",
+                    "esri/geometry/Extent",
+                    "esri/SpatialReference",
+                    "esri/tasks/GeometryService",
+                    "esri/tasks/DistanceParameters",
+                    "esri/toolbars/draw",
+                    "esri/Color",
+                    "esri/symbols/Font",
+                    "esri/geometry/Point",
+                    "esri/symbols/SimpleMarkerSymbol",
+                    "esri/symbols/SimpleLineSymbol",
+                    "esri/layers/ArcGISTiledMapServiceLayer",
+                    "esri/layers/ArcGISDynamicMapServiceLayer"],
+                function (dom, lang, json, esriConfig, esriRequest, HDSXMap, TextSymbol, Graphic, Geometry, Extent, SpatialReference, GeometryService, DistanceParameters, Draw, Color, Font, esriPoint, SimpleMarkerSymbol, SimpleLineSymbol, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer) {
+                    var totalDistance = 0, inputPoints = [], legDistance = [];
+                    var basmapUrl = "http://localhost:6080/arcgis/rest/services/MyMapServiceTiled/MapServer";
+                    var map = new HDSXMap("mapDiv", {
+                        logo: false,
+                        slider: true,
+                        sliderStyle: "large"
+                    });
+
+                    var layersRequest = esriRequest({
+                        url: basmapUrl,
+                        content: {f: "json"},
+                        handleAs: "json",
+                        callbackParamName: "callback"
+                    });
+                    layersRequest.then(
+                            function (response) {
+                                var isTileLayer = response.tileInfo;
+                                try {
+                                    var layer = null;
+                                    if (isTileLayer) {
+                                        layer = new ArcGISTiledMapServiceLayer(basmapUrl, {});
+                                    }
+                                    else {
+                                        layer = new ArcGISDynamicMapServiceLayer(basmapUrl, {});
+                                    }
+                                    if (layer) {
+                                        map.addLayer(layer);
+                                    }
+                                }
+                                catch (err) {
+                                    console.error("加载: " + basmapUrl + "失败!");
+                                }
+                            }, function (error) {
+                                console.log("Error: ", error.message);
+                            });
+
+
+                    map.on("load", function () {
+                        var tb = new Draw(map);
+                        tb.on("draw-end", lang.hitch(map, drawPolyline));
+                        tb.activate(Draw.POLYLINE);
+                    });
+
+                    map.on("click", mapClickHandler);
+
+                    var geometryService = new GeometryService("http://211.101.37.251:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer");
+                    geometryService.on("areas-and-lengths-complete", outputAreaAndLength);
+
+                    function drawPolyline(evtObj) {
+                        var geometry = evtObj.geometry;
+                        var symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([0, 0, 0]), 2);
+                        var graphic = new Graphic(geometry, symbol);
+                        map.graphics.clear();
+                        map.graphics.add(graphic);
+
+                        try {
+                            getLabelPoints(geometry);
+                        } catch (err) {
+                            console.info("测距错误:", err);
+                        } finally {
+                            totalDistance = 0;
+                            inputPoints = [];
+                            legDistance = [];
+                        }
+                    }
+
+                    function outputAreaAndLength(evtObj) {
+                        var result = evtObj.result;
+                        console.log(json.stringify(result));
+                        dom.byId("area").innerHTML = result.areas[0].toFixed(3) + " 平方千米";
+                        dom.byId("length").innerHTML = result.lengths[0].toFixed(3) + " 千米";
+                    }
+
+                    //地图鼠标点击响应
+                    function mapClickHandler(evtObj) {
+                        var point = new esriPoint(evtObj.mapPoint.x, evtObj.mapPoint.y, map.spatialReference);
+                        inputPoints.push(point);
+                        if (inputPoints.length >= 2) {
+                            var distParams = new DistanceParameters();
+                            distParams.distanceUnit = GeometryService.UNIT_METER;
+                            distParams.geometry1 = inputPoints[inputPoints.length - 2];
+                            distParams.geometry2 = inputPoints[inputPoints.length - 1];
+                            distParams.geodesic = true;
+                            geometryService.distance(distParams, function (distance) {
+                                if (!isNaN(distance)) {
+                                    legDistance.push(distance);
+                                    totalDistance += distance;
+                                }
+                            });
+                        }
+                    }
+
+
+                    function getLabelPoints(geometries) {
+                        if (!geometries.paths) {
+                            return;
+                        }
+                        var paths = geometries.paths[0];
+                        var pathsLength = paths.length;
+                        if (pathsLength >= 2) {
+                            var font = new Font("14pt", Font.STYLE_NORMAL, Font.VARIANT_NORMAL, Font.WEIGHT_BOLDER);
+                            var pointQD = new esriPoint(paths[0][0], paths[0][1]);
+                            var pointZD = new esriPoint(paths[pathsLength - 1][0], paths[pathsLength - 1][1]);
+                            var textSymbolQD = new TextSymbol(
+                                    "起点",
+                                    font, new Color([0, 0, 0]));
+                            var textSymbolZD = new TextSymbol(
+                                    "总长:" + (totalDistance / 1000).toFixed(2) + "," + "千米 ",
+                                    font, new Color([0, 0, 0]));
+                            var labelPointGraphicQD = new Graphic(pointQD, textSymbolQD);
+                            var labelPointGraphicZD = new Graphic(pointZD, textSymbolZD);
+                            map.graphics.add(labelPointGraphicQD);
+                            map.graphics.add(labelPointGraphicZD);
+                            for (var i = 1; i < pathsLength - 1; i++) {
+                                var point = new esriPoint(paths[i][0], paths[i][1]);
+                                var legTemp = 0;
+                                for (var m = 0; m <= i - 1; m++) {
+                                    legTemp += legDistance[m];
+                                }
+                                var textSymbol = new TextSymbol(
+                                        (legTemp / 1000).toFixed(2) + "," + "千米 ",
+                                        font, new Color([0, 0, 0]));
+                                textSymbol.setAngle(15);
+                                //textSymbol.setOffset(10, 10);
+                                textSymbol.setDecoration("justify");
+
+                                var labelPointGraphic = new Graphic(point, textSymbol);
+                                map.graphics.add(labelPointGraphic);
+                            }
+                        }
+                    }
+
+                });
+    </script>
+
+</head>
+<body>
+<div id="mapDiv"></div>
+</body>
+</html>
