@@ -110,7 +110,7 @@ define([
                     this.map.setZoom(this.minZoomLevel);
                 } else {
                     var scale = (this.maxTop - top) / 6;
-                    scale = Number.parseInt(scale - 1);
+                    scale = parseInt(scale - 1);
                     this.map.setZoom(scale);
                 }
             })
@@ -133,14 +133,14 @@ define([
             this.map.panDown();
         },
         zoomIn: function () {
-            if (this.currentZoomLevel !== -1) {
+            if (this.currentZoomLevel !== null & this.currentZoomLevel !== -1) {
                 this.map.setZoom(this.currentZoomLevel + 1);
             } else {
                 this.map.setScale(this.map.getScale() / 1.5);
             }
         },
         zoomOut: function () {
-            if (this.currentZoomLevel !== -1) {
+            if (this.currentZoomLevel !== null & this.currentZoomLevel !== -1) {
                 this.map.setZoom(this.currentZoomLevel - 1);
             } else {
                 this.map.setScale(this.map.getScale() * 1.5);
@@ -149,12 +149,11 @@ define([
         zoomToLevel: function (evtObj) {
             var y = evtObj.offsetY;
             var scale = (this.maxTop - y) / 6;
-            scale = Number.parseInt(scale - 1);
+            scale = parseInt(scale - 1);
             this.map.setZoom(scale);
         },
 
         createDyanmicZoomSilder: function () {
-            console.info("创建动态的");
             domStyle.set(this.SilderBarDiv, "display", "none");
             domStyle.set(this.BMap_stdMpZoomOut, "top", "18px");
             domStyle.set(this.BMap_stdMpSliderMask, "display", "none");
