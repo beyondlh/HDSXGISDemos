@@ -47,19 +47,15 @@
             "esri/graphic", "esri/geometry/Extent", "esri/symbols/SimpleMarkerSymbol",
             "esri/symbols/SimpleFillSymbol", "esri/symbols/PictureMarkerSymbol",
             "esri/renderers/ClassBreaksRenderer", "esri/layers/GraphicsLayer",
-            "esri/SpatialReference", "esri/dijit/PopupTemplate",
-            "esri/geometry/Point", "esri/geometry/webMercatorUtils",
-            "esri/layers/ArcGISTiledMapServiceLayer",
+            "esri/SpatialReference", "esri/layers/ArcGISTiledMapServiceLayer",
             "esri/layers/ArcGISDynamicMapServiceLayer",
-            "esri/tasks/QueryTask",
-            "esri/tasks/query",
             "App/Extras/HDSXMap",
             "App/Extras/HDSXClusterLayer",
             "dojo/domReady!"
         ], function (parser, ready, arrayUtils, on, domStyle, query, Color,
                      esriRequest, Graphic, Extent,
                      SimpleMarkerSymbol, SimpleFillSymbol, PictureMarkerSymbol, ClassBreaksRenderer,
-                     GraphicsLayer, SpatialReference, PopupTemplate, esriPoint, webMercatorUtils, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, QueryTask, esriQuery, HDSXMap, HDSXClusterLayer) {
+                     GraphicsLayer, SpatialReference, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, HDSXMap, HDSXClusterLayer) {
             ready(function () {
                 parser.parse();
 
@@ -119,22 +115,11 @@
                     });
                     photos.then(addClusters, error);
                     map.setZoom(1);
+                    map.disableDoubleClickZoom();
                 });
 
 
                 function addClusters(resp) {
-                    var clusterData = {};
-                    clusterData.data = arrayUtils.map(resp, function (p) {
-                        var webMercator = p.geometry;
-                        var point = new esriPoint(p.longitude, p.latitude);
-                        var webMercator = webMercatorUtils.geographicToWebMercator(point);
-                        return {
-                            "x": webMercator.x,
-                            "y": webMercator.y,
-                            "attributes": p
-                        };
-                    });
-
                     var defaultSym = new SimpleMarkerSymbol().setSize(4);
                     var renderer = new ClassBreaksRenderer(defaultSym, "clusterCount");
 
@@ -157,7 +142,7 @@
                     renderer.addBreak(10, 20, red2);
 
                     clusterLayer = new HDSXClusterLayer({
-                        "data": clusterData.data,
+                        "data": resp,
                         "distance": 4000000,
                         "id": "clusters",
                         "labelColor": "#fff",
@@ -171,15 +156,17 @@
                         }
                     });
 
-
+                    window.clusterLayer = clusterLayer;
                     on(clusterLayer, "click", function (obj) {
+//                        clusterLayer.addClusterData({
+//                            "DeviceType": "cms",
+//                            "longitude": "119.3001",
+//                            "latitude": "43.3001",
+//                            "graph": "cms"
+//                        });
                         var graphic = obj.graphic;
-                        if (graphic.cusIsSingle) {
-
-                        }
                         var clustorCount = obj.graphic.attributes.clusterCount;
                         if (clustorCount == 1) {
-                            debugger;
                             var symbol = obj.graphic.symbol;
                             var heitht = symbol.height;
                             var width = symbol.width;
