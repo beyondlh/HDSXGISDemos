@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <!--<title>要素聚合</title>-->
     <link rel="stylesheet" href="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/js/esri/css/esri.css">
+    <link rel="stylesheet" href="framework/bootstrap.min.css">
     <style>
         html, body {
             height: 100%;
@@ -41,23 +42,31 @@
     <script>
         var map, basmapUrl, queryLayerID = 182;
         require([
-            "dojo/parser", "dojo/ready", "dojo/_base/array",
+            "dojo/parser", "dojo/ready", "dojo/dom", "dojo/_base/array",
             "dojo/on", "dojo/dom-style", "dojo/query",
             "esri/Color", "esri/request",
             "esri/graphic", "esri/geometry/Extent", "esri/symbols/SimpleMarkerSymbol",
             "esri/symbols/SimpleFillSymbol", "esri/symbols/PictureMarkerSymbol",
             "esri/renderers/ClassBreaksRenderer", "esri/layers/GraphicsLayer",
-            "esri/SpatialReference", "esri/layers/ArcGISTiledMapServiceLayer",
-            "esri/layers/ArcGISDynamicMapServiceLayer",
-            "App/Extras/HDSXMap",
-            "App/Extras/HDSXClusterLayer",
+            "esri/SpatialReference", "esri/geometry/Point", "esri/layers/ArcGISTiledMapServiceLayer", "esri/layers/ArcGISDynamicMapServiceLayer",
+            "App/Extras/HDSXMap", "App/Extras/HDSXClusterLayer",
             "dojo/domReady!"
-        ], function (parser, ready, arrayUtils, on, domStyle, query, Color,
+        ], function (parser, ready, dom, arrayUtils, on, domStyle, query, Color,
                      esriRequest, Graphic, Extent,
                      SimpleMarkerSymbol, SimpleFillSymbol, PictureMarkerSymbol, ClassBreaksRenderer,
-                     GraphicsLayer, SpatialReference, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, HDSXMap, HDSXClusterLayer) {
+                     GraphicsLayer, SpatialReference, esriPoint, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, HDSXMap, HDSXClusterLayer) {
             ready(function () {
                 parser.parse();
+
+                on(dom.byId("addGraphic"), "click", function () {
+                    clusterLayer.addClusterData({
+                        longitude:119.3201,
+                        latitude: 43.3401,
+                        attributes:{
+
+                        }
+                    });
+                });
 
                 var clusterLayer;
                 var wgs = new SpatialReference({
@@ -124,10 +133,16 @@
                     var renderer = new ClassBreaksRenderer(defaultSym, "clusterCount");
 
                     var picBaseUrl = require.toUrl("App/resources/Images/");
+
+
+
                     var blue = new PictureMarkerSymbol(picBaseUrl + "blue.png", 32, 32).setOffset(0, 15);
                     var green = new PictureMarkerSymbol(picBaseUrl + "green.png", 64, 64).setOffset(0, 15);
                     var red = new PictureMarkerSymbol(picBaseUrl + "red.png", 72, 72).setOffset(0, 15);
                     var red2 = new PictureMarkerSymbol(picBaseUrl + "red.png", 120, 120).setOffset(0, 15);
+
+
+
 
 
                     var cms = new PictureMarkerSymbol(picBaseUrl + "cms.png", 32, 32).setOffset(0, 15);
@@ -156,18 +171,11 @@
                         }
                     });
 
-                    window.clusterLayer = clusterLayer;
+
                     on(clusterLayer, "click", function (obj) {
-//                        clusterLayer.addClusterData({
-//                            "DeviceType": "cms",
-//                            "longitude": "119.3001",
-//                            "latitude": "43.3001",
-//                            "graph": "cms"
-//                        });
                         var graphic = obj.graphic;
-                        var clustorCount = obj.graphic.attributes.clusterCount;
-                        if (clustorCount == 1) {
-                            var symbol = obj.graphic.symbol;
+                        if (graphic.IsSingle) {
+                            var symbol = graphic.symbol;
                             var heitht = symbol.height;
                             var width = symbol.width;
                             var symbol2 = null;
@@ -179,14 +187,7 @@
                             }
                             graphic.setSymbol(symbol2);
                             graphic.draw();
-
-                            var clusterId = obj.graphic.attributes.clusterId;
-                            var len = clusterLayer.clusterData.length;
-                            var features = arrayUtils.filter(clusterLayer.clusterData, function (item) {
-                                return item.attributes.clusterId == clusterId;
-                            });
-                            var fea = features[0];
-                            console.info("选中的要素::" + fea);
+                            console.info("选中的要素::" + graphic);
                         }
                     });
 
@@ -216,6 +217,7 @@
 </head>
 
 <body>
+<button id="addGraphic" class="btn btn-primary btn-large" type="button">动态添加graphic到聚合图层中</button>
 <div id="map">
 </div>
 </body>
