@@ -5,7 +5,8 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <title>测距离</title>
 
-    <link rel="stylesheet" href="http://js.arcgis.com/3.10/js/esri/css/esri.css">
+    <link rel="stylesheet" href="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/js/esri/css/esri.css">
+    <link rel="stylesheet" href="framework/bootstrap.min.css">
     <style>
         html, body, #mapDiv {
             height: 100%;
@@ -52,6 +53,7 @@
         require(["dojo/dom",
                     "dojo/_base/lang",
                     "dojo/json",
+                    "dojo/on",
                     "esri/config",
                     "esri/request",
                     "App/Extras/HDSXMap",
@@ -70,9 +72,10 @@
                     "esri/symbols/SimpleLineSymbol",
                     "esri/layers/ArcGISTiledMapServiceLayer",
                     "esri/layers/ArcGISDynamicMapServiceLayer"],
-                function (dom, lang, json, esriConfig, esriRequest, HDSXMap, TextSymbol, Graphic, Geometry, Extent, SpatialReference, GeometryService, DistanceParameters, Draw, Color, Font, esriPoint, SimpleMarkerSymbol, SimpleLineSymbol, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer) {
-                    var totalDistance = 0, inputPoints = [], legDistance = [];
-                    var basmapUrl = "http://localhost:6080/arcgis/rest/services/MyMapServiceTiled/MapServer";
+                function (dom, lang, json, on, esriConfig, esriRequest, HDSXMap, TextSymbol, Graphic, Geometry, Extent, SpatialReference, GeometryService, DistanceParameters, Draw, Color, Font, esriPoint, SimpleMarkerSymbol, SimpleLineSymbol, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer) {
+                    var totalDistance = 0, inputPoints = [], legDistance = [], enableMeasureLength = false, tb;
+
+                    var basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/SHANXI_GGJ/MapServer";
                     var map = new HDSXMap("mapDiv", {
                         logo: false,
                         slider: true,
@@ -109,15 +112,25 @@
 
 
                     map.on("load", function () {
-                        var tb = new Draw(map);
+                        tb = new Draw(map);
                         tb.on("draw-end", lang.hitch(map, drawPolyline));
-                        tb.activate(Draw.POLYLINE);
+                        on(dom.byId("enableMeasure"), "click", function () {
+                            enableMeasureLength = true;
+                            tb.activate(Draw.POLYLINE);
+                        });
+                        on(dom.byId("disableMeasuer"), "click", function () {
+                            tb.deactivate();
+                            enableMeasureLength = false;
+                        });
+                        on(dom.byId("clearGraphics"), "click", function () {
+                            map.graphics.clear();
+                        });
+
                     });
 
                     map.on("click", mapClickHandler);
 
                     var geometryService = new GeometryService("http://211.101.37.251:6080/arcgis/rest/services/Utilities/Geometry/GeometryServer");
-                    geometryService.on("areas-and-lengths-complete", outputAreaAndLength);
 
                     function drawPolyline(evtObj) {
                         var geometry = evtObj.geometry;
@@ -137,15 +150,11 @@
                         }
                     }
 
-                    function outputAreaAndLength(evtObj) {
-                        var result = evtObj.result;
-                        console.log(json.stringify(result));
-                        dom.byId("area").innerHTML = result.areas[0].toFixed(3) + " 平方千米";
-                        dom.byId("length").innerHTML = result.lengths[0].toFixed(3) + " 千米";
-                    }
-
                     //地图鼠标点击响应
                     function mapClickHandler(evtObj) {
+                        if (!enableMeasureLength) {
+                            return;
+                        }
                         var point = new esriPoint(evtObj.mapPoint.x, evtObj.mapPoint.y, map.spatialReference);
                         inputPoints.push(point);
                         if (inputPoints.length >= 2) {
@@ -208,6 +217,11 @@
 
 </head>
 <body>
+<div>
+    <button id="enableMeasure" class="btn btn-primary btn-large" type="button">启用测距</button>
+    <button id="disableMeasuer" class="btn btn-primary btn-large" type="button">禁用测距</button>
+    <button id="clearGraphics" class="btn btn-primary btn-large" type="button">清除graphic</button>
+</div>
 <div id="mapDiv"></div>
 </body>
 </html>

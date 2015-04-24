@@ -60,13 +60,18 @@
 
                 on(dom.byId("addGraphic"), "click", function () {
                     clusterLayer.addClusterData({
-                        longitude:119.3201,
+                        id: "27",
+                        longitude: 119.3201,
                         latitude: 43.3401,
-                        attributes:{
-
-                        }
+                        isFault: true,//是否为故障设备
+                        DeviceType:"cms"
                     });
                 });
+
+                on(dom.byId("removeGraphic"), "click", function () {
+                    clusterLayer.removeClusterData("12");
+                });
+
 
                 var clusterLayer;
                 var wgs = new SpatialReference({
@@ -80,10 +85,14 @@
 
 
                 map = new HDSXMap("map", {
-                    zoom: 12,
                     logo: false,
                     slider: true,
-                    sliderStyle: "large"
+                    sliderStyle: "large",
+                    extent: new Extent(
+                            118.97657703546064,
+                            43.03391980887471,
+                            119.18459903443436,
+                            43.124681969481095, null)
                 });
                 basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
                 var layersRequest = esriRequest({
@@ -123,7 +132,6 @@
                         handleAs: "json"
                     });
                     photos.then(addClusters, error);
-                    map.setZoom(1);
                     map.disableDoubleClickZoom();
                 });
 
@@ -135,14 +143,10 @@
                     var picBaseUrl = require.toUrl("App/resources/Images/");
 
 
-
                     var blue = new PictureMarkerSymbol(picBaseUrl + "blue.png", 32, 32).setOffset(0, 15);
                     var green = new PictureMarkerSymbol(picBaseUrl + "green.png", 64, 64).setOffset(0, 15);
                     var red = new PictureMarkerSymbol(picBaseUrl + "red.png", 72, 72).setOffset(0, 15);
                     var red2 = new PictureMarkerSymbol(picBaseUrl + "red.png", 120, 120).setOffset(0, 15);
-
-
-
 
 
                     var cms = new PictureMarkerSymbol(picBaseUrl + "cms.png", 32, 32).setOffset(0, 15);
@@ -150,6 +154,8 @@
                     var wd = new PictureMarkerSymbol(picBaseUrl + "wd.png", 32, 32).setOffset(0, 15);
                     var camer = new PictureMarkerSymbol(picBaseUrl + "camer.png", 32, 32).setOffset(0, 15);
 
+                    //故障图标
+                    var falut = new PictureMarkerSymbol(picBaseUrl + "fault.png", 32, 32).setOffset(0, 15);
 
                     renderer.addBreak(0, 2, blue);
                     renderer.addBreak(2, 5, green);
@@ -164,10 +170,22 @@
                         "labelOffset": 10,
                         "singleColor": "#888",
                         "singleSymbols": {
-                            "cms": cms,
-                            "vd": vd,
-                            "wd": wd,
-                            "camer": camer
+                            "cms": {
+                                default: cms,
+                                fault: falut
+                            },
+                            "vd": {
+                                default: vd,
+                                fault: falut
+                            },
+                            "wd": {
+                                default: wd,
+                                fault: falut
+                            },
+                            "camer": {
+                                default: camer,
+                                fault: falut
+                            }
                         }
                     });
 
@@ -218,6 +236,7 @@
 
 <body>
 <button id="addGraphic" class="btn btn-primary btn-large" type="button">动态添加graphic到聚合图层中</button>
+<button id="removeGraphic" class="btn btn-primary btn-large" type="button">从聚合图层中移除graphic</button>
 <div id="map">
 </div>
 </body>

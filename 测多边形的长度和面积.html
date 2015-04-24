@@ -67,13 +67,7 @@
                     "esri/layers/ArcGISDynamicMapServiceLayer"],
                 function (dom, lang, json, esriConfig, esriRequest, HDSXMap, Graphic, Geometry, Extent, SpatialReference, GeometryService, AreasAndLengthsParameters, Draw, SimpleFillSymbol, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer) {
 
-                    //identify proxy page to use if the toJson payload to the geometry service is greater than 2000 characters.
-                    //If this null or not available the project and lengths operation will not work.  Otherwise it will do a http post to the proxy.
-                    esriConfig.defaults.io.proxyUrl = "/proxy";
-                    esriConfig.defaults.io.alwaysUseProxy = false;
-
-
-                    var basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
+                    var basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/SHANXI_GGJ/MapServer";
 
                     var customExtent = new Extent(-13669046, 5696984, -13666179, 5698895, new SpatialReference({wkid: 102113}));
                     var map = new HDSXMap("mapDiv", {

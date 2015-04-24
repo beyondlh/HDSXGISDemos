@@ -70,7 +70,7 @@
                     scalebarUnit: "metric"
                 });
 
-                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
+                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/JXGSMAP/MapServer";
                 var layersRequest = esriRequest({
                     url: basmapUrl,
                     content: {f: "json"},
@@ -121,7 +121,7 @@
 </head>
 
 <body>
-<div id="fullMap"></div>
+<div>地图加载后5s全图显示</div>
 <div id="map">
 </div>
 </body>

@@ -70,7 +70,7 @@
                     scalebarUnit: "metric"
                 });
 
-                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
+                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/SHANXI_GGJ/MapServer";
                 var layersRequest = esriRequest({
                     url: basmapUrl,
                     content: {f: "json"},
@@ -80,7 +80,7 @@
                 layersRequest.then(
                         function (response) {
                             try {
-                                var layer = null;
+                                var layer = null, isTileLayer = response.tileInfo;
                                 if (isTileLayer) {
                                     layer = new ArcGISTiledMapServiceLayer(basmapUrl, {});
                                 }

@@ -2,10 +2,11 @@ define(["dojo/_base/declare",
     "dojo/Evented",
     "dojo/_base/array", "dojo/_base/lang", "dojo/on", "esri/Color", "esri/SpatialReference",
     "esri/geometry/Point", "esri/graphic", "esri/symbols/SimpleMarkerSymbol",
-    "esri/symbols/TextSymbol", "esri/geometry/mathUtils", "esri/dijit/PopupTemplate",
+    "esri/symbols/TextSymbol", "esri/geometry/Point", "esri/geometry/webMercatorUtils", "esri/geometry/mathUtils", "esri/dijit/PopupTemplate",
     "esri/layers/GraphicsLayer"
-], function (declare, Evented, arrayUtils, lang, on, Color, SpatialReference, Point, Graphic, SimpleMarkerSymbol, TextSymbol, mathUtils, PopupTemplate, GraphicsLayer) {
+], function (declare, Evented, arrayUtils, lang, on, Color, SpatialReference, Point, Graphic, SimpleMarkerSymbol, TextSymbol, esriPoint, webMercatorUtils, mathUtils, PopupTemplate, GraphicsLayer) {
     return declare([GraphicsLayer, Evented], {
+        isClusterLayer: true,
         constructor: function (options) {
             // 选项:
             //   data:  Object[]
@@ -31,13 +32,45 @@ define(["dojo/_base/declare",
             //   spatialReference:  SpatialReference?
             //     可选. 图层中所有graphics的空间参考. 要和地图使用的空间参考一致. 默认是102100.
 
+            window.cluster = this;//调试使用
+            if (!Array.prototype.remove) {
+                Array.prototype.remove = function (obj) {
+                    for (var i = 0; i < this.length; i++) {
+                        var temp = this[i];
+                        if (!isNaN(obj)) {
+                            temp = i;
+                        }
+                        if (temp == obj) {
+                            for (var j = i; j < this.length; j++) {
+                                this[j] = this[j + 1];
+                            }
+                            this.length = this.length - 1;
+                        }
+                    }
+                };
+            }
+
             this._clusterTolerance = options.distance || 100;
             this._singleSymbols = options.singleSymbols || null;
-            this.clusterData = options.data || [];
+
+            if (options.data) {
+                this.clusterData = arrayUtils.map(options.data, function (p) {
+                    var point = new esriPoint(p.longitude, p.latitude);
+                    var webMercator = webMercatorUtils.geographicToWebMercator(point);
+                    return {
+                        "x": webMercator.x,
+                        "y": webMercator.y,
+                        "attributes": p
+                    };
+                });
+            } else {
+                this.clusterData = [];
+            }
             this._clusters = [];
             this._clusterLabelColor = options.labelColor || "#000";
             this._clusterLabelOffset = (options.hasOwnProperty("labelOffset")) ? options.labelOffset : -5;
             this._singles = [];
+            this.prevSelectedDeviceGraph = null;
             this._showSingles = options.hasOwnProperty("showSingles") ? options.showSingles : true;
             var SMS = SimpleMarkerSymbol;
             if (options.singleSymbols && options.singleSymbols.defaultSymbol) {
@@ -56,35 +89,101 @@ define(["dojo/_base/declare",
             on(this, "click", lang.hitch(this, function (obj) {
                 var graphic = obj.graphic;
                 graphic.isSelected = !graphic.isSelected;
+                if (this.prevSelectedDeviceGraph) {
+
+                    if (this.prevSelectedDeviceGraph.attributes.clusterId == graphic.attributes.clusterId) {
+                        return;
+                    } else {
+                        var culsterID = this.prevSelectedDeviceGraph.attributes.clusterId;
+                        var fea = this.clusterData[culsterID - 1];
+                        var symbol = this.getCustomSymbol(fea.attributes);
+                        this.prevSelectedDeviceGraph.setSymbol(symbol);
+                        this.prevSelectedDeviceGraph.draw();
+                        this.prevSelectedDeviceGraph.isSelected = false;
+                    }
+                }
+                var clustorCount = obj.graphic.attributes.clusterCount;
+                if (clustorCount == 1) {
+                    this.prevSelectedDeviceGraph = graphic;
+                } else {
+                    this.prevSelectedDeviceGraph = null;
+                }
             }));
         },
 
+        //重新绘制
+        _reDraw: function () {
+            this.clear();
+            this._singles = [];
+            this._clusterGraphics();
+            this._redrawSingleGraphic();
+        },
+        //添加某个设备
+        addClusterData: function (dataObj) {
+            var point = new esriPoint(dataObj.longitude, dataObj.latitude);
+            var webMercator = webMercatorUtils.geographicToWebMercator(point);
+            this.clusterData.push({
+                "x": webMercator.x,
+                "y": webMercator.y,
+                "attributes": dataObj
+            });
+            this._reDraw();
+        },
+        //移除某个设备
+        removeClusterData: function (id) {
+            var len = this.clusterData.length;
+            for (var i = 0; i < len; i++) {
+                debugger;
+                var data = this.clusterData[i];
+                if (data.attributes.id === id) {
+                    debugger;
+                    this.clusterData.remove(data);
+                    this._reDraw();
+                }
+            }
+        },
 
         _setMap: function (map, surface) {
             this._clusterResolution = map.extent.getWidth() / map.width;
             this._clusterGraphics();
             this._zoomEnd = on(map, "zoom-end", lang.hitch(this, function () {
+                this.prevSelectedDeviceGraph = null;
                 this._clusterResolution = this._map.extent.getWidth() / this._map.width;
                 this.clear();
                 this._clusterGraphics();
-                arrayUtils.forEach(this.graphics, function (graphic) {
-                    if (graphic.attributes.clusterCount === 1) {
-                        var fea = this.clusterData[graphic.attributes.clusterId - 1];
-                        if (fea && fea.attributes && fea.attributes.DeviceType) {
-                            var symbol = this._getCustomSymbol(fea.attributes);
-                            if (symbol && !graphic.isSelected) {
-                                graphic.setSymbol(symbol);
-                                graphic.draw();
-                            }
-                        } else {
-                            debugger;
-                        }
-                    }
-                }, this);
+                this._redrawSingleGraphic();
             }));
+
+
+            on(map, "layer-add-result", lang.hitch(this, function (obj) {
+                var layer = obj.layer;
+                if (layer.isClusterLayer) {
+                    this._redrawSingleGraphic();
+                }
+            }));
+
+
             var div = this.inherited(arguments);
             return div;
         },
+
+        _redrawSingleGraphic: function () {
+            arrayUtils.forEach(this.graphics, function (graphic) {
+                if (graphic.IsSingle) {
+                    var fea = this.clusterData[graphic.attributes.clusterId - 1];
+                    if (fea && fea.attributes && fea.attributes.DeviceType) {
+                        var symbol = this.getCustomSymbol(fea.attributes);
+                        if (symbol && !graphic.isSelected) {
+                            graphic.setSymbol(symbol);
+                            graphic.draw();
+                        }
+                    } else {
+                    }
+                }
+            }, this);
+        },
+
+
         _unsetMap: function () {
             this.inherited(arguments);
             if (this._zoomEnd) {
@@ -93,9 +192,14 @@ define(["dojo/_base/declare",
         },
 
 
-        _getCustomSymbol: function (attributes) {
+        getCustomSymbol: function (attributes) {
             var DeviceType = attributes.DeviceType;
-            return this._singleSymbols[DeviceType];
+            if (attributes.isFault) {
+                debugger;
+                return this._singleSymbols[DeviceType].fault;
+            } else {
+                return this._singleSymbols[DeviceType].default;
+            }
         },
 
 
@@ -247,7 +351,7 @@ define(["dojo/_base/declare",
 
             this.add(graphic);
             if (c.attributes.clusterCount == 1) {
-                graphic._cusIsSingle = true;
+                graphic.IsSingle = true;
                 return;
             }
 
@@ -282,8 +386,7 @@ define(["dojo/_base/declare",
 
         _updateClusterGeometry: function (c) {
             var cg = arrayUtils.filter(this.graphics, function (g) {
-                return !g.symbol &&
-                    g.attributes.clusterId == c.attributes.clusterId;
+                return !g.symbol && g.attributes.clusterId == c.attributes.clusterId;
             });
             if (cg.length == 1) {
                 cg[0].geometry.update(c.x, c.y);

@@ -37,7 +37,7 @@
 }
 
 .BMap_stdMpPan {
-    background: url("../resources/nav.png") no-repeat;
+    background: url("Resources/nav.png") no-repeat;
     height: 44px;
     overflow: hidden;
     width: 44px;
@@ -50,7 +50,7 @@
 }
 
 .BMap_stdMpZoom .BMap_button {
-    background-image: url("../resources/nav.png");
+    background-image: url("Resources/nav.png");
     background-repeat: no-repeat;
     height: 21px;
     left: 12px;
@@ -72,7 +72,7 @@
 }
 
 .BMap_stdMpSliderBar {
-    background: url("../resources/nav.png") no-repeat 0 -309px;
+    background: url("Resources/nav.png") no-repeat 0 -309px;
     height: 11px;
     left: 13px;
     overflow: hidden;
@@ -81,7 +81,7 @@
 }
 
 .BMap_stdMpSliderBgTop {
-    background: url("../resources/nav.png") no-repeat -23px -226px;
+    background: url("Resources/nav.png") no-repeat -23px -226px;
     left: 18px;
     overflow: hidden;
     width: 10px;
@@ -92,7 +92,7 @@
 }
 
 .BMap_stdMpSliderBgBot {
-    background: url("../resources/nav.png") no-repeat -33px bottom;
+    background: url("Resources/nav.png") no-repeat -33px bottom;
     height: 8px;
     left: 19px;
     overflow: hidden;

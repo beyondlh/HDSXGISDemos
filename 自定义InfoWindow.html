@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=7,IE=9">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Display Visible Features</title>
+    <link rel="stylesheet" type="text/css"
+          href="http://js.arcgis.com/3.13/dijit/themes/soria/soria.css"/>
+    <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.13/esri/css/esri.css"/>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-color: #fff;
+            font-family: arial, helvetica, sans-serif;
+        }
+
+        #map {
+            -moz-border-radius: 4px;
+            overflow: hidden;
+            border: solid 2px #727B84;
+            height: 500px;
+            width: 500px;
+            margin: 5px;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var dojoConfig = (function () {
+            var path_location = location.pathname.replace(/\/[^/]+$/, '');
+            return {
+                async: true,
+                isDebug: true,
+                packages: [{
+                    name: "App",
+                    location: path_location
+                }]
+            };
+        })();
+    </script>
+    <script src="http://js.arcgis.com/3.13/"></script>
+    <script type="text/javascript">
+        require([
+                    "dojo/on",
+                    "dojo/_base/array",
+                    "dojo/dom",
+                    "dojo/dom-style",
+                    "dojo/number",
+                    "dojo/dom-construct",
+                    "dijit/registry",
+                    "dijit/place",
+                    "esri/map",
+                    "esri/graphic",
+                    "esri/geometry/Extent",
+                    "esri/layers/FeatureLayer",
+                    "esri/layers/ArcGISTiledMapServiceLayer",
+                    "App/Extras/HDSXInfoWindow",
+                    "dojo/text!./Extras/markLabelTemplate.html",
+                    "dojo/domReady!"],
+                function (on, array, dom, domStyle, dojoNumber, domConstruct,
+                          registry, place, Map,Graphic, Extent, FeatureLayer, ArcGISTiledMapServiceLayer, HSSXInfoWindow,markTemplate) {
+                    var featureLayer, pageInfo, grid;
+                    var map;
+                    getObjectIds();
+
+                    function getObjectIds() {
+                        map = new Map(dom.byId("myMap"), {
+                            center: [119.030181533, 43.316866276], // long, lat
+                            logo: false,
+                            slider: true,
+                            extent: new Extent(117.95161230989422, 42.99645519533791, 119.57678417687629, 43.47234739650397, null)
+                        });
+                        var layer = new ArcGISTiledMapServiceLayer("http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer");
+                        on(map, "click", function (evtObj) {
+                            var infoWindow = new HSSXInfoWindow({
+                                domNode: domConstruct.create("div", null, map.root)
+                            });
+                            infoWindow.setMap(map);
+                            infoWindow.setTitle("添加标注著名景点");
+                            infoWindow.setContent(markTemplate);
+                            infoWindow.show(evtObj.mapPoint, HSSXInfoWindow.ANCHOR_UPPERRIGHT);
+                            console.info("鼠标点击地图");
+                        });
+
+
+                        map.addLayer(layer);
+                    }
+                }
+        );
+    </script>
+</head>
+
+<body class="soria">
+<div id="myMap"></div>
+</body>
+</html>
