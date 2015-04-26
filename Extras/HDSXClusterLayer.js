@@ -88,33 +88,33 @@ define(["dojo/_base/declare",
 
             on(this, "click", lang.hitch(this, function (obj) {
                 var graphic = obj.graphic;
-                graphic.isSelected = !graphic.isSelected;
-                if (this.prevSelectedDeviceGraph) {
-
-                    if (this.prevSelectedDeviceGraph.attributes.clusterId == graphic.attributes.clusterId) {
-                        return;
-                    } else {
-                        var culsterID = this.prevSelectedDeviceGraph.attributes.clusterId;
-                        var fea = this.clusterData[culsterID - 1];
-                        var symbol = this.getCustomSymbol(fea.attributes);
-                        this.prevSelectedDeviceGraph.setSymbol(symbol);
-                        this.prevSelectedDeviceGraph.draw();
-                        this.prevSelectedDeviceGraph.isSelected = false;
+                graphic.isSelected = !graphic.isSelected;//更改当前的选中状态
+                if (graphic.IsSingle) {
+                    if (this.prevSelectedDeviceID) {
+                        if (this.prevSelectedDeviceID !== graphic.attributes.originalAtt.id) {
+                            var graphics = arrayUtils.filter(this.graphics, function (graphic) {
+                                if (graphic.attributes.originalAtt) {
+                                    return graphic.attributes.originalAtt.id === this.prevSelectedDeviceID;
+                                }
+                            }, this);
+                            var g = graphics[0]; //前一个被选中的graphic
+                            g.isSelected = false;
+                            var symbol = this.getCustomSymbol(g);
+                            if (symbol && g.IsSingle) {
+                                g.setSymbol(symbol);
+                                g.draw();
+                            }
+                        }
                     }
+                    this.prevSelectedDeviceID = graphic.attributes.originalAtt.id;
                 }
-                var clustorCount = obj.graphic.attributes.clusterCount;
-                if (clustorCount == 1) {
-                    this.prevSelectedDeviceGraph = graphic;
-                } else {
-                    this.prevSelectedDeviceGraph = null;
-                }
+
             }));
         },
 
         //重新绘制
         _reDraw: function () {
             this.clear();
-            this._singles = [];
             this._clusterGraphics();
             this._redrawSingleGraphic();
         },
@@ -133,10 +133,8 @@ define(["dojo/_base/declare",
         removeClusterData: function (id) {
             var len = this.clusterData.length;
             for (var i = 0; i < len; i++) {
-                debugger;
                 var data = this.clusterData[i];
                 if (data.attributes.id === id) {
-                    debugger;
                     this.clusterData.remove(data);
                     this._reDraw();
                 }
@@ -149,9 +147,7 @@ define(["dojo/_base/declare",
             this._zoomEnd = on(map, "zoom-end", lang.hitch(this, function () {
                 this.prevSelectedDeviceGraph = null;
                 this._clusterResolution = this._map.extent.getWidth() / this._map.width;
-                this.clear();
-                this._clusterGraphics();
-                this._redrawSingleGraphic();
+                this._reDraw();
             }));
 
 
@@ -167,22 +163,6 @@ define(["dojo/_base/declare",
             return div;
         },
 
-        _redrawSingleGraphic: function () {
-            arrayUtils.forEach(this.graphics, function (graphic) {
-                if (graphic.IsSingle) {
-                    var fea = this.clusterData[graphic.attributes.clusterId - 1];
-                    if (fea && fea.attributes && fea.attributes.DeviceType) {
-                        var symbol = this.getCustomSymbol(fea.attributes);
-                        if (symbol && !graphic.isSelected) {
-                            graphic.setSymbol(symbol);
-                            graphic.draw();
-                        }
-                    } else {
-                    }
-                }
-            }, this);
-        },
-
 
         _unsetMap: function () {
             this.inherited(arguments);
@@ -192,13 +172,40 @@ define(["dojo/_base/declare",
         },
 
 
-        getCustomSymbol: function (attributes) {
-            var DeviceType = attributes.DeviceType;
-            if (attributes.isFault) {
-                debugger;
+        getCustomSymbol: function (graphic) {
+            var attr = graphic.attributes.originalAtt;
+            var DeviceType = attr.DeviceType;
+            if (attr.isFault) {
                 return this._singleSymbols[DeviceType].fault;
             } else {
                 return this._singleSymbols[DeviceType].default;
+            }
+        },
+
+
+        _redrawSingleGraphic: function (deviceID) {
+            arrayUtils.forEach(this.graphics, function (graphic) {
+                if (graphic.IsSingle) {
+                    var symbol = this.getCustomSymbol(graphic);
+                    if (symbol) {
+                        graphic.isSelected = false;
+                        graphic.setSymbol(symbol);
+                        graphic.draw();
+                    }
+                }
+            }, this);
+        },
+
+        changeDiviceStatue: function (/*设备id*/ deviceID, objIsFault) {
+            var len = this.clusterData.length;
+            for (var i = 0; i < len; i++) {
+                var item = this.clusterData[i];
+                if (item.attributes.id === deviceID) {
+                    var device = this.clusterData[i];
+                    device.attributes.isFault = objIsFault.isFault;
+                    this._redrawSingleGraphic(deviceID);
+                    return;
+                }
             }
         },
 
@@ -230,6 +237,8 @@ define(["dojo/_base/declare",
 
         clear: function () {
             this.inherited(arguments);
+            this._singles = null;
+            this._singles = [];
             this._clusters.length = 0;
         },
 
@@ -320,6 +329,7 @@ define(["dojo/_base/declare",
         },
 
         _clusterCreate: function (p) {
+            //创建clusterId
             var clusterId = this._clusters.length + 1;
             if (!p.attributes) {
                 p.attributes = {};
@@ -331,7 +341,8 @@ define(["dojo/_base/declare",
                 "attributes": {
                     "clusterCount": 1,
                     "clusterId": clusterId,
-                    "extent": [p.x, p.y, p.x, p.y]
+                    "extent": [p.x, p.y, p.x, p.y],
+                    "originalAtt": p.attributes
                 }
             };
             this._clusters.push(cluster);

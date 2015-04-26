@@ -64,12 +64,24 @@
                         longitude: 119.3201,
                         latitude: 43.3401,
                         isFault: true,//是否为故障设备
-                        DeviceType:"cms"
+                        DeviceType: "cms"
                     });
                 });
 
                 on(dom.byId("removeGraphic"), "click", function () {
-                    clusterLayer.removeClusterData("12");
+                    clusterLayer.removeClusterData("27");
+                });
+
+                on(dom.byId("changeDeviceState"), "click", function () {
+                    clusterLayer.changeDiviceStatue("15", {
+                        isFault: true
+                    });
+                });
+
+                on(dom.byId("changeDeviceStateTOfaluse"), "click", function () {
+                    clusterLayer.changeDiviceStatue("15", {
+                        isFault: false
+                    });
                 });
 
 
@@ -128,7 +140,7 @@
                     //隐藏popup的“缩放到”链接
                     domStyle.set(query("a.action.zoomTo")[0], "display", "none");
                     var photos = esriRequest({
-                        url: "resources/DeviceJson.txt",
+                        url: "resources/DeviceJson3.txt",
                         handleAs: "json"
                     });
                     photos.then(addClusters, error);
@@ -199,9 +211,9 @@
                             var symbol2 = null;
                             //如果graphic处于被选中状态，更换symbol，放大和更换图片都是对symbol操作就行了。
                             if (graphic.isSelected) {
-                                symbol2 = new PictureMarkerSymbol(picBaseUrl + "green.png", heitht * 1.5, width * 1.5).setOffset(0, 15);
+                                symbol2 = new PictureMarkerSymbol(symbol.url, heitht * 1.5, width * 1.5).setOffset(0, 15);
                             } else {
-                                symbol2 = new PictureMarkerSymbol(picBaseUrl + "green.png", heitht / 1.5, width / 1.5).setOffset(0, 15);
+                                symbol2 = new PictureMarkerSymbol(symbol.url, heitht / 1.5, width / 1.5).setOffset(0, 15);
                             }
                             graphic.setSymbol(symbol2);
                             graphic.draw();
@@ -237,6 +249,8 @@
 <body>
 <button id="addGraphic" class="btn btn-primary btn-large" type="button">动态添加graphic到聚合图层中</button>
 <button id="removeGraphic" class="btn btn-primary btn-large" type="button">从聚合图层中移除graphic</button>
+<button id="changeDeviceState" class="btn btn-primary btn-large" type="button">更改正常设备到问题设备</button>
+<button id="changeDeviceStateTOfaluse" class="btn btn-primary btn-large" type="button">更改问题设备到正常状态graphic</button>
 <div id="map">
 </div>
 </body>
