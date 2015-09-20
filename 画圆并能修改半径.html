@@ -158,6 +158,9 @@
                                 }
                                 setTimeout(function () {
                                     var path = query("path", mycircles_layer)[0].pathSegList[0];
+                                    while (!path) {
+                                        path = query("path", mycircles_layer)[0].pathSegList[0];
+                                    }
                                     var pathClone = getPath(path);
                                     domStyle.set(node, "left", pathClone.x + "px");
                                     domStyle.set(node, "top", pathClone.y + "px");
