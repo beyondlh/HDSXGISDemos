@@ -17,6 +17,25 @@
             height: 100%;
             width: 100%;
         }
+
+        .HDEditCircle {
+            z-index: 1000;
+            cursor: pointer;
+            position: absolute;
+            height: 19px;
+            width: 31px;
+            background-image: url("./resources/editcircle.png");
+        }
+
+        .HDEditCircleLabel {
+            position: absolute;
+            height: 20px;
+            left: 30px;
+            width: 56px;
+            text-indent: 5px;
+            text-align: center;
+            background: url("./resources/editcircle.png") -31px 0;
+        }
     </style>
 
     <script type="text/javascript">
@@ -34,94 +53,173 @@
     </script>
     <script src="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/init.js"></script>
     <script>
-        var map, basmapUrl, queryLayerID = 182, mapExtent = null;
+        var map, basmapUrl, mapExtent = null, mxoffset = 17, myoffset = 10, mycircles_layer;
         require([
-            "dojo/parser", "dojo/ready", "dojo/_base/array",
-            "esri/request",
-            "esri/layers/ArcGISTiledMapServiceLayer",
-            "esri/layers/ArcGISDynamicMapServiceLayer",
-            "esri/dijit/OverviewMap",
-            "esri/geometry/Extent",
-            "esri/dijit/Scalebar",
-            "esri/SpatialReference",
-            "App/extras/HDSXMap",
-            "dojo/domReady!"
-        ], function (parser, ready, arrayUtils, esriRequest, ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer, OverviewMap, Extent, Scalebar, SpatialReference, HDSXMap) {
-            ready(function () {
-                parser.parse();
-                map = new HDSXMap("map", {
-                    logo: false,
-                    slider: true,
-                    sliderStyle: "large"
-                });
-
-                //添加鹰眼图
-                var overviewMapDijit = new OverviewMap({
-                    map: map,
-                    visible: true,
-                    attachTo: 'bottom-right'
-                });
-                overviewMapDijit.startup();//这句不能少
-
-
-//                显示比例尺
-                var scalebar = new Scalebar({
-                    map: map,
-                    scalebarUnit: "metric"
-                });
-
-                basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer";
-                var layersRequest = esriRequest({
-                    url: basmapUrl,
-                    content: {f: "json"},
-                    handleAs: "json",
-                    callbackParamName: "callback"
-                });
-                layersRequest.then(
-                        function (response) {
-                            debugger;
-                            var isTileLayer = response.tileInfo;
-                            var fullExtent = response.fullExtent;
-                            mapExtent = new Extent(fullExtent.xmin, fullExtent.ymin, fullExtent.xmax, fullExtent.ymax, new SpatialReference({wkid: fullExtent.spatialReference.wkid}));
-                            try {
-                                var layer = null;
-                                if (isTileLayer) {
-                                    layer = new ArcGISTiledMapServiceLayer(basmapUrl, {});
-                                }
-                                else {
-                                    layer = new ArcGISDynamicMapServiceLayer(basmapUrl, {});
-                                }
-                                if (layer) {
-                                    map.addLayer(layer);
-                                }
-                            }
-                            catch (err) {
-                                console.error("加载: " + basmapUrl + "失败!");
-                            }
-                        }, function (error) {
-                            console.log("Error: ", error.message);
+                    "dojo/parser", "dojo/ready", "dojo/_base/array",
+                    "dojo/dom", "esri/request",
+                    "dojo/query", "dojo/dom-construct", "dojo/dom-style",
+                    "dojo/dom-attr", "dojo/dnd/Moveable", "dojo/dnd/Mover",
+                    "esri/layers/ArcGISTiledMapServiceLayer",
+                    "esri/layers/ArcGISDynamicMapServiceLayer",
+                    "esri/symbols/SimpleFillSymbol",
+                    "esri/graphic", "esri/geometry/Point",
+                    "esri/layers/GraphicsLayer",
+                    "esri/dijit/OverviewMap",
+                    "esri/geometry/Extent",
+                    "esri/dijit/Scalebar",
+                    "esri/SpatialReference",
+                    "App/extras/HDSXMap",
+                    "esri/toolbars/draw",
+                    "esri/geometry/Circle",
+                    "esri/units",
+                    "dojo/domReady!"
+                ], function (parser, ready, arrayUtils, dom,
+                             esriRequest, query, domConstruct,
+                             domStyle, domAttr, Moveable, Mover,
+                             ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
+                             SimpleFillSymbol, Graphic, esriPoint, GraphicsLayer, OverviewMap,
+                             Extent, Scalebar, SpatialReference,
+                             HDSXMap, Draw, Circle, Units) {
+                    ready(function () {
+                        parser.parse();
+                        basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmgmap/nmgmap/MapServer";
+                        map = new HDSXMap("map", {
+                            logo: false,
+                            slider: true,
+                            sliderStyle: "large"
                         });
 
 
-                map.on("load", function () {
-                    map.setZoom(3);
-                    //5s后全图
-                    setTimeout(function () {
-                        //全图需要调用map.setExtent方法，传入全图的extent对象
-                        map.setExtent(mapExtent);
-                    }, 5000);
-                });
+                        //显示比例尺
+                        var scalebar = new Scalebar({
+                            map: map,
+                            scalebarUnit: "metric"
+                        });
 
-                function error(err) {
-                    debugger;
+                        var layersRequest = esriRequest({
+                            url: basmapUrl,
+                            content: {f: "json"},
+                            handleAs: "json",
+                            callbackParamName: "callback"
+                        });
+                        layersRequest.then(
+                                function (response) {
+                                    var isTileLayer = response.tileInfo;
+                                    var fullExtent = response.fullExtent;
+                                    mapExtent = new Extent(fullExtent.xmin, fullExtent.ymin, fullExtent.xmax, fullExtent.ymax, new SpatialReference({wkid: fullExtent.spatialReference.wkid}));
+                                    try {
+                                        var layer = null;
+                                        if (isTileLayer) {
+                                            layer = new ArcGISTiledMapServiceLayer(basmapUrl, {});
+                                        }
+                                        else {
+                                            layer = new ArcGISDynamicMapServiceLayer(basmapUrl, {});
+                                        }
+                                        if (layer) {
+                                            map.addLayer(layer);
+                                        }
+                                    }
+                                    catch (err) {
+                                        console.error("加载: " + basmapUrl + "失败!");
+                                    }
+                                }, function (error) {
+                                    console.log("Error: ", error.message);
+                                });
+
+
+                        map.on("load", function () {
+                            map.autoResize = false;
+                            map.setZoom(3);
+                            //5s后全图
+                            setTimeout(function () {
+                                //全图需要调用map.setExtent方法，传入全图的extent对象
+                                map.setExtent(mapExtent);
+                            }, 1000);
+
+                            var circleGeometry = new Circle({
+                                center: [110.83238564500589, 43.79803755821768],
+                                radius: 30000
+                            });
+
+
+                            var symbol = new SimpleFillSymbol().setColor("blue").outline.setColor("blue");
+                            var gl = new GraphicsLayer({id: "mycircles"});
+                            map.addLayer(gl);
+                            var node = null;
+                            var mm = map.on("click", function (e) {
+                                var graphic = new Graphic(circleGeometry, symbol);
+                                gl.add(graphic);
+                                var nodeToInsert = query(".esriPopup")[0];
+                                node = domConstruct.create("span", {
+                                    class: "HDEditCircle"
+                                }, nodeToInsert, "before");
+
+
+                                var label = domConstruct.create("label", {
+                                    class: "HDEditCircleLabel"
+                                }, node, "first");
+                                label.innerText = circleGeometry.radius + "m";
+                                mycircles_layer = dom.byId("mycircles_layer");
+                                var path = query("path", mycircles_layer)[0].pathSegList[0];
+//                                console.info("path::" ,path.x,path.y);
+                                var pathClone = getPath(path);
+                                domStyle.set(node, "left", pathClone.x + "px");
+                                domStyle.set(node, "top", pathClone.y + "px");
+
+                                map.on("zoom-start", function (obj) {
+                                    if (node) {
+//                                        domStyle.set(node, "display", "none");
+                                    }
+
+                                });
+                                map.on("zoom-end", function (obj) {
+                                    if (node) {
+                                        var path = query("path", mycircles_layer)[0].pathSegList[0];
+                                        var pathClone = getPath(path);
+                                        domStyle.set(node, "left", pathClone.x + "px");
+                                        domStyle.set(node, "top", pathClone.y + "px");
+//                                        domStyle.set(node, "display", "block");
+                                    }
+                                });
+
+                                map.on("pan", function (obj) {
+                                    if (node) {
+                                        var path = query("path", mycircles_layer)[0].pathSegList[0];
+                                        var pathClone = getPath(path);
+                                        domStyle.set(node, "left", pathClone.x + "px");
+                                        domStyle.set(node, "top", pathClone.y + "px");
+                                    } else {
+                                        console.info("node为空");
+                                    }
+                                });
+
+
+                                mm.remove();
+                                var move = new Moveable(node, {});
+                            });
+
+                        });
+
+                        function error(err) {
+
+                        }
+
+                        function getPath(path) {
+                            var pathClone = {};
+                            pathClone.x = path.x + map_graphics_layer.transform.baseVal[0].matrix.e;
+                            pathClone.y = path.y + map_graphics_layer.transform.baseVal[0].matrix.f;
+
+                            pathClone.x -= mxoffset;
+                            pathClone.y -= myoffset;
+                            return pathClone;
+                        }
+                    });
                 }
-            });
-        });
+        )
     </script>
 </head>
 
 <body>
-<div id="fullMap"></div>
 <div id="map">
 </div>
 </body>
