@@ -144,46 +144,49 @@
 
                             var symbol = new SimpleFillSymbol().setColor("blue").outline.setColor("blue");
                             var gl = new GraphicsLayer({id: "mycircles"});
+                            gl.on("graphic-add", function () {
+                                if (!node) {
+                                    var nodeToInsert = query(".esriPopup")[0];
+                                    node = domConstruct.create("span", {
+                                        class: "HDEditCircle"
+                                    }, nodeToInsert, "before");
+
+                                    var label = domConstruct.create("label", {
+                                        class: "HDEditCircleLabel"
+                                    }, node, "first");
+                                    label.innerText = circleGeometry.radius + "m";
+                                }
+                                setTimeout(function () {
+                                    var path = query("path", mycircles_layer)[0].pathSegList[0];
+                                    var pathClone = getPath(path);
+                                    domStyle.set(node, "left", pathClone.x + "px");
+                                    domStyle.set(node, "top", pathClone.y + "px");
+                                    domStyle.set(node, "display", "block");
+                                }, 100);
+                            });
+
                             map.addLayer(gl);
                             var node = null;
                             var mm = map.on("click", function (e) {
                                 var graphic = new Graphic(circleGeometry, symbol);
                                 gl.add(graphic);
-                                var nodeToInsert = query(".esriPopup")[0];
-                                node = domConstruct.create("span", {
-                                    class: "HDEditCircle"
-                                }, nodeToInsert, "before");
-
-
-                                var label = domConstruct.create("label", {
-                                    class: "HDEditCircleLabel"
-                                }, node, "first");
-                                label.innerText = circleGeometry.radius + "m";
-                                mycircles_layer = dom.byId("mycircles_layer");
-                                var path = query("path", mycircles_layer)[0].pathSegList[0];
-//                                console.info("path::" ,path.x,path.y);
-                                var pathClone = getPath(path);
-                                domStyle.set(node, "left", pathClone.x + "px");
-                                domStyle.set(node, "top", pathClone.y + "px");
-
-                                map.on("zoom-start", function (obj) {
+                                map.on("zoom", function (obj) {
                                     if (node) {
-//                                        domStyle.set(node, "display", "none");
+                                        domStyle.set(node, "display", "none");
                                     }
 
                                 });
                                 map.on("zoom-end", function (obj) {
                                     if (node) {
-                                        var path = query("path", mycircles_layer)[0].pathSegList[0];
-                                        var pathClone = getPath(path);
-                                        domStyle.set(node, "left", pathClone.x + "px");
-                                        domStyle.set(node, "top", pathClone.y + "px");
-//                                        domStyle.set(node, "display", "block");
+                                        gl.clear();
+                                        var graphic = new Graphic(circleGeometry, symbol);
+                                        gl.add(graphic);
                                     }
                                 });
 
                                 map.on("pan", function (obj) {
                                     if (node) {
+                                        mycircles_layer = dom.byId("mycircles_layer");
                                         var path = query("path", mycircles_layer)[0].pathSegList[0];
                                         var pathClone = getPath(path);
                                         domStyle.set(node, "left", pathClone.x + "px");
@@ -208,7 +211,6 @@
                             var pathClone = {};
                             pathClone.x = path.x + map_graphics_layer.transform.baseVal[0].matrix.e;
                             pathClone.y = path.y + map_graphics_layer.transform.baseVal[0].matrix.f;
-
                             pathClone.x -= mxoffset;
                             pathClone.y -= myoffset;
                             return pathClone;
