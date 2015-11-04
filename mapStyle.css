@@ -1,0 +1,379 @@
+body {
+    font-size: 12px;
+    background-color: #fff;
+    margin: 0;
+    color: #4c4c4c;
+    padding: 0;
+    min-width: 960px;
+    min-height: 600px;
+    height: 100%;
+    overflow: hidden;
+}
+body.pc {
+    font-family: Arial,Helvetica,SimSun,sans-serif;
+}
+
+form, p, ol, ul, li, dl, dt, dd, h1, h2, h3, h4, tr, th, td, input {
+    margin: 0;
+    padding: 0;
+}
+a {
+    color: #00c;
+    text-decoration: underline;
+    outline: 0;
+    cursor: pointer;
+}
+a, input, select {
+    font-size: 12px;
+}
+.blueC a {
+    color: #3d6dcc;
+    text-decoration: none;
+}
+.scrollbar-y {
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 3px center;
+}
+.scrollbar-y-prev {
+    width: 9px;
+    height: 0;
+    overflow: hidden;
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 0 0;
+}
+
+.tangram-scrollbar-track {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.map_popup {
+    position: absolute;
+    z-index: 50000;
+}
+
+.map_popup .popup_main {
+    border: 1px solid #cdcdcd;
+    z-index: 2;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #FFF;
+    overflow: hidden;
+}
+
+.map_popup .title {
+    background: #f9f9f9;
+    border-bottom: 1px solid #dadada;
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+    color: #4c4c4c;
+    padding-left: 7px;
+}
+
+.map_popup button {
+    position: absolute;
+    z-index: 50;
+    top: 7px;
+    right: 6px;
+    width: 12px;
+    height: 12px;
+    background: url(http://webmap2.map.bdstatic.com/wolfman/static/common/images/popup_close_15d2283.gif) no-repeat;
+    border: 0;
+    cursor: pointer;
+}
+
+.map_popup .poput_shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    z-index: 1;
+    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/pop_shadow_da3923f.png) no-repeat right bottom;
+    _left: 1px;
+    _top: 1px;
+    _background: #505050;
+    _border: 1px solid #505050;
+    _filter: alpha(opacity=20);
+}
+
+.sel_city {
+    margin: 7px 5px 5px;
+}
+
+.tangram-scrollpanel-main {
+    overflow: hidden;
+    zoom: 1;
+    position: relative;
+}
+
+.sel_city_default {
+    display: none;
+    border-bottom: 1px solid #CCC;
+    padding: 7px 0 13px 5px;
+    margin-bottom: 13px;
+    line-height: 22px;
+}
+
+.sel_city_default a.def_city {
+    margin-left: 10px;
+    text-decoration: underline;
+}
+
+.sel_city a {
+    white-space: nowrap;
+    margin-right: 9px;
+    line-height: 18px;
+}
+
+
+
+.sel-city-hotcity {
+    padding: 0 5px;
+}
+
+.sel-city-hotcity {
+    padding: 0 5px;
+}
+
+.sel-city-searchbar {
+    background: #f9f9f9;
+    height: 24px;
+    padding: 5px 6px;
+    margin: 10px 0;
+}
+
+.sel-city-searchbar .btnbar {
+    float: left;
+    width: 108px;
+    height: 23px;
+    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll;
+    background-position: -302px 0;
+}
+
+.sel-city-searchbar .sel-city-btnl-sel {
+    background-position: -302px -24px;
+    font-weight: 700;
+}
+
+.sel-city-searchbar .sel-city-btnl, .sel-city-searchbar .sel-city-btnr {
+    float: left;
+    height: 23px;
+    line-height: 23px;
+    width: 54px;
+    margin-left: 0;
+    text-align: center;
+    cursor: pointer;
+    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -1300px -1000px;
+}
+
+.sel-city-searchbar .sel-city-btnr {
+    margin-left: -1px;
+}
+
+.sel-city-searchbar .sel-city-btnl, .sel-city-searchbar .sel-city-btnr {
+    float: left;
+    height: 23px;
+    line-height: 23px;
+    width: 54px;
+    margin-left: 0;
+    text-align: center;
+    cursor: pointer;
+    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -1300px -1000px;
+}
+
+.sel-city-searchinput {
+    border: 1px solid #ccc;
+    height: 20px;
+    width: 121px;
+    float: left;
+    line-height: 20px;
+    text-indent: 4px;
+}
+
+.sel-city-btn-submit {
+    float: left;
+    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -302px -98px;
+    height: 24px;
+    line-height: 24px;
+    width: 48px;
+    cursor: pointer;
+    margin-left: 5px;
+    text-align: center;
+}
+
+.sel-city-searchbar form .sel-city-tip {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    height: 20px;
+    line-height: 20px;
+    width: 121px;
+    text-align: center;
+    background: #FEFAF1;
+    border: 1px solid #E8AA6C;
+    color: #AE6B42;
+    display: none;
+}
+
+.sel-city-letterbar {
+    margin: 0 11px 10px;
+}
+
+.tangram-scrollpanel-main {
+    overflow: hidden;
+    zoom: 1;
+    position: relative;
+}
+
+img, table {
+    border: 0;
+}
+
+.scrollbar-y {
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 3px center;
+}
+
+.scrollbar-y-prev {
+    width: 9px;
+    height: 0;
+    overflow: hidden;
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 0 0;
+}
+
+.tangram-scrollbar-track {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.scrollbar-y-next {
+    width: 9px;
+    height: 0;
+    overflow: hidden;
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 0 -15px;
+}
+
+.tangram-scrollbar-prev, .tangram-scrollbar-next, .tangram-scrollbar-thumb-btn {
+    font-size: 0;
+}
+
+.map_popup .poput_shadow {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    z-index: 1;
+    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/pop_shadow_da3923f.png) no-repeat right bottom;
+    _left: 1px;
+    _top: 1px;
+    _background: #505050;
+    _border: 1px solid #505050;
+    _filter: alpha(opacity=20);
+}
+
+.sug {
+    border: 1px solid #817F82;
+    position: absolute;
+    -moz-user-select: none;
+}
+
+.tangram-scrollbar-slider {
+    width: 100%;
+    height: 100%;
+}
+
+.scrollbar-y-thumb-btn {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat -12px center;
+}
+
+.tangram-scrollbar-prev, .tangram-scrollbar-next, .tangram-scrollbar-thumb-btn {
+    font-size: 0;
+}
+
+.tangram-scrollbar-slider-thumb {
+    width: 100%;
+    height: 100%;
+    min-height: 12px;
+}
+
+.scrollbar-y-thumb-prev {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 4px;
+    font-size: 0;
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) -36px 0;
+}
+.scrollbar-y-thumb-next {
+    position: absolute;
+    bottom: 0!important;
+    bottom: -1px;
+    width: 100%;
+    height: 4px;
+    font-size: 0;
+    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) -36px -4px;
+}
+
+.sel_city td.sel-city-td-letter {
+    padding: 0 14px 0 7px;
+}
+
+.sel_city td {
+    vertical-align: top;
+}
+
+.sel_city td, .sel_city tr {
+    margin: 0;
+    padding: 0;
+}
+
+.sel_city td.sel-city-td-sf {
+    padding-right: 8px;
+}
+
+.sel_city .sel-city-td-sf {
+    font-weight: 700;
+}
+
+.sel_city td {
+    vertical-align: top;
+}
+
+.sel_city td, .sel_city tr {
+    margin: 0;
+    padding: 0;
+}
+
+.sel_city td, .sel_city tr {
+    margin: 0;
+    padding: 0;
+}
+.sel-city-td-letter div {
+    font-size: 24px;
+    line-height: 24px;
+    font-weight: 700;
+    color: #ccc;
+    padding: 0;
+    margin: 0;
+}
+
+.sel_city .sel-city-td-sf a {
+    margin: 0;
+}
+.sel_city a {
+    white-space: nowrap;
+    margin-right: 9px;
+    line-height: 18px;
+}
+
+/*Òþ²ØÐ¡µÄ×Ö·û*/
+.sel-city-tr-splitline {
+    height: 12px;
+    visibility: hidden;
+}
