@@ -51,37 +51,43 @@
             };
         })();
     </script>
-    <script src="http://111.75.200.54:7077/arcgis_js_api/library/3.10/3.10/init.js"></script>
+    <script src="http://127.0.0.1:8001/gis/3.13/init.js"></script>
     <script>
         var map, basmapUrl, mapExtent = null, mxoffset = 17, myoffset = 10, mycircles_layer;
+        var pointCenter, pointBorder, labelMeter, circleGeometry;
         require([
-                    "dojo/parser", "dojo/ready", "dojo/_base/array",
-                    "dojo/dom", "esri/request",
-                    "dojo/query", "dojo/dom-construct", "dojo/dom-style",
-                    "dojo/dom-attr", "dojo/dnd/Moveable", "dojo/dnd/Mover",
+                    "dojo/_base/declare", "dojo/parser", "dojo/ready", "dojo/_base/array",
+                    "dojo/dom", "esri/request", "dojo/query", "dojo/dom-geometry",
+                    "dojo/dom-construct", "dojo/dom-style",
+                    "dojo/dom-attr", "dojo/dnd/Moveable",
                     "esri/layers/ArcGISTiledMapServiceLayer",
                     "esri/layers/ArcGISDynamicMapServiceLayer",
                     "esri/symbols/SimpleFillSymbol",
-                    "esri/graphic", "esri/geometry/Point",
-                    "esri/layers/GraphicsLayer",
+                    "esri/symbols/SimpleLineSymbol",
+                    "esri/graphic", "esri/layers/GraphicsLayer",
                     "esri/dijit/OverviewMap",
+                    "esri/geometry/Point",
+                    "esri/geometry/ScreenPoint",
                     "esri/geometry/Extent",
+                    "esri/units",
+                    "esri/geometry/mathUtils",
+                    "esri/geometry/geometryEngine",
                     "esri/dijit/Scalebar",
                     "esri/SpatialReference",
                     "App/extras/HDSXMap",
-                    "esri/toolbars/draw",
                     "esri/geometry/Circle",
-                    "esri/units",
+                    "esri/geometry/Polyline",
                     "dojo/domReady!"
-                ], function (parser, ready, arrayUtils, dom,
-                             esriRequest, query, domConstruct,
-                             domStyle, domAttr, Moveable, Mover,
+                ], function (declare, parser, ready, arrayUtils, dom,
+                             esriRequest, query, domGeom, domConstruct,
+                             domStyle, domAttr, Moveable,
                              ArcGISTiledMapServiceLayer, ArcGISDynamicMapServiceLayer,
-                             SimpleFillSymbol, Graphic, esriPoint, GraphicsLayer, OverviewMap,
-                             Extent, Scalebar, SpatialReference,
-                             HDSXMap, Draw, Circle, Units) {
+                             SimpleFillSymbol, SimpleLineSymbol, Graphic, GraphicsLayer, OverviewMap, esriPoint, ScreenPoint,
+                             Extent, Units, mathUtils, geometryEngine, Scalebar, SpatialReference,
+                             HDSXMap, Circle, Polyline) {
                     ready(function () {
                         parser.parse();
+
                         basmapUrl = "http://211.101.37.251:6080/arcgis/rest/services/nmgmap/nmgmap/MapServer";
                         map = new HDSXMap("map", {
                             logo: false,
@@ -136,13 +142,8 @@
                                 map.setExtent(mapExtent);
                             }, 1000);
 
-                            var circleGeometry = new Circle({
-                                center: [110.83238564500589, 43.79803755821768],
-                                radius: 30000
-                            });
-
-
                             var symbol = new SimpleFillSymbol().setColor("blue").outline.setColor("blue");
+
                             var gl = new GraphicsLayer({id: "mycircles"});
                             gl.on("graphic-add", function () {
                                 if (!node) {
@@ -151,10 +152,24 @@
                                         class: "HDEditCircle"
                                     }, nodeToInsert, "before");
 
-                                    var label = domConstruct.create("label", {
+                                    labelMeter = domConstruct.create("labelMeter", {
                                         class: "HDEditCircleLabel"
                                     }, node, "first");
-                                    label.innerText = circleGeometry.radius + "m";
+                                    labelMeter.innerText = circleGeometry.radius + "m";
+                                    var myMove = new Moveable(node, {});
+                                    myMove.onMove = function (mover, leftTop) {
+                                        var left = domStyle.get(node, "left");
+                                        var top = domStyle.get(node, "top");
+                                        console.info(left, top);
+                                        leftTop.l = leftTop.l;
+                                        leftTop.t = top;
+                                        domGeom.setMarginBox(mover.node, leftTop);
+                                        pointBorder = map.toMap(new ScreenPoint(left, top));
+                                        var polyline = new Polyline(new SpatialReference({wkid: 4326}));
+                                        polyline.addPath([pointCenter, pointBorder]);
+                                        var distance = geometryEngine.geodesicLength(polyline, 9001);
+                                        labelMeter.innerText = distance + "m";
+                                    };
                                 }
                                 setTimeout(function () {
                                     var path = query("path", mycircles_layer)[0].pathSegList[0];
@@ -171,13 +186,18 @@
                             map.addLayer(gl);
                             var node = null;
                             var mm = map.on("click", function (e) {
+                                pointCenter = e.mapPoint;
+                                circleGeometry = new Circle({
+                                    center: pointCenter,
+                                    radius: 30000,
+                                    radiusUnit: Units.METERS
+                                });
                                 var graphic = new Graphic(circleGeometry, symbol);
                                 gl.add(graphic);
                                 map.on("zoom", function (obj) {
                                     if (node) {
                                         domStyle.set(node, "display", "none");
                                     }
-
                                 });
                                 map.on("zoom-end", function (obj) {
                                     if (node) {
@@ -198,12 +218,8 @@
                                         console.info("node为空");
                                     }
                                 });
-
-
                                 mm.remove();
-                                var move = new Moveable(node, {});
                             });
-
                         });
 
                         function error(err) {

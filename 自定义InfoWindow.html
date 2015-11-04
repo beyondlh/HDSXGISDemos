@@ -35,10 +35,10 @@
         var dojoConfig = (function () {
             var path_location = location.pathname.replace(/\/[^/]+$/, '');
             return {
-                async: true,
-                isDebug: true,
+                async   : true,
+                isDebug : true,
                 packages: [{
-                    name: "App",
+                    name    : "App",
                     location: path_location
                 }]
             };
@@ -57,6 +57,7 @@
                     "dijit/place",
                     "esri/map",
                     "esri/graphic",
+                    "esri/symbols/PictureMarkerSymbol",
                     "esri/geometry/Extent",
                     "esri/layers/FeatureLayer",
                     "esri/layers/ArcGISTiledMapServiceLayer",
@@ -64,28 +65,34 @@
                     "dojo/text!./Extras/markLabelTemplate.html",
                     "dojo/domReady!"],
                 function (on, array, dom, domStyle, dojoNumber, domConstruct,
-                          registry, place, Map,Graphic, Extent, FeatureLayer, ArcGISTiledMapServiceLayer, HSSXInfoWindow,markTemplate) {
+                          registry, place, Map, Graphic, PictureMarkerSymbol, Extent, FeatureLayer, ArcGISTiledMapServiceLayer, HSSXInfoWindow, markTemplate) {
                     var featureLayer, pageInfo, grid;
                     var map;
                     getObjectIds();
 
                     function getObjectIds() {
-                        map = new Map(dom.byId("myMap"), {
+                        map       = new Map(dom.byId("myMap"), {
                             center: [119.030181533, 43.316866276], // long, lat
-                            logo: false,
+                            logo  : false,
                             slider: true,
                             extent: new Extent(117.95161230989422, 42.99645519533791, 119.57678417687629, 43.47234739650397, null)
                         });
-                        var layer = new ArcGISTiledMapServiceLayer("http://211.101.37.251:6080/arcgis/rest/services/nmcfpad/MapServer");
+                        var layer = new ArcGISTiledMapServiceLayer("http://211.101.37.251:6080/arcgis/rest/services/SXGXPTMAPdyone/MapServer");
                         on(map, "click", function (evtObj) {
-                            var infoWindow = new HSSXInfoWindow({
-                                domNode: domConstruct.create("div", null, map.root)
-                            });
-                            infoWindow.setMap(map);
-                            infoWindow.setTitle("添加标注著名景点");
-                            infoWindow.setContent(markTemplate);
-                            infoWindow.show(evtObj.mapPoint, HSSXInfoWindow.ANCHOR_UPPERRIGHT);
-                            console.info("鼠标点击地图");
+//                            var infoWindow = new HSSXInfoWindow({
+//                                domNode: domConstruct.create("div", null, map.root)
+//                            });
+//                            infoWindow.setMap(map);
+//                            infoWindow.setTitle("添加标注著名景点");
+//                            infoWindow.setContent(markTemplate);
+//                            infoWindow.show(evtObj.mapPoint, HSSXInfoWindow.ANCHOR_UPPERRIGHT);
+//                            console.info("鼠标点击地图");
+
+                            var point   = evtObj.mapPoint;
+
+                            var pictureMarkerSymbol = new PictureMarkerSymbol('resources/Images/123.gif', 51, 51);
+                            var graphic = new Graphic(point,pictureMarkerSymbol);
+                            map.graphics.add(graphic);
                         });
 
 

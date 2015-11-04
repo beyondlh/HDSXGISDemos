@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>加载地图</title>
+    <link rel="stylesheet" type="text/css"
+          href="http://192.168.0.226:8001/gis/3.13/dijit/themes/soria/soria.css"/>
+    <link rel="stylesheet" type="text/css" href="http://192.168.0.226:8001/gis/3.13/esri/css/esri.css"/>
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        body {
+            background-image: none;
+        !important;
+            background-color: #fff;
+            font-family: arial, helvetica, sans-serif;
+        }
+
+        #map {
+            -moz-border-radius: 4px;
+            /*overflow: hidden;*/
+            border: solid 2px #727B84;
+            height: 500px;
+            width: 500px;
+            margin: 5px;
+        }
+
+    </style>
+
+    <script type="text/javascript">
+        var dojoConfig = (function () {
+            return {
+                async: true
+            };
+        })();
+    </script>
+
+    <script src="http://192.168.0.226:8001/gis/3.13/init.js"></script>
+    <script type="text/javascript">
+        require([
+                    "dojo/on",
+                    "dojo/_base/array",
+                    "dojo/dom",
+                    "dojo/dom-style",
+                    "dojo/number",
+                    "dojo/dom-construct",
+                    "dijit/registry",
+                    "dijit/place",
+                    "esri/map",
+                    "esri/graphic",
+                    "esri/symbols/PictureMarkerSymbol",
+                    "esri/geometry/Extent",
+                    "esri/layers/FeatureLayer",
+                    "esri/layers/ArcGISTiledMapServiceLayer",
+                    "dojo/domReady!"],
+                function (on, array, dom, domStyle, dojoNumber, domConstruct,
+                          registry, place, Map, Graphic, PictureMarkerSymbol, Extent, FeatureLayer, ArcGISTiledMapServiceLayer) {
+                    var map;
+                    var mapUrl = "http://111.75.200.54:6080/arcgis/rest/services/JXMAP_FIVE/MapServer";
+                    getObjectIds();
+                    function getObjectIds() {
+                        map       = new Map(dom.byId("myMap"), {
+                            logo        : false,
+                            isZoomSlider: true,
+                            sliderStyle : "large",
+                            zoom        : 10,
+                            extent      : new Extent({
+                                xmin: 115.78920205694278,
+                                ymin: 28.576155657791993,
+                                xmax: 115.83031440561668,
+                                ymax: 28.62327607412177, spatialReference: {wkid: 4326}
+                            })
+                        });
+                        var layer = new ArcGISTiledMapServiceLayer(mapUrl);
+                        layer.setScaleRange(8000000,0);
+                        map.addLayer(layer);
+                    }
+                }
+        );
+    </script>·
+</head>
+
+<body class="soria">
+<div id="myMap"></div>
+</body>
+</html>
