@@ -4,19 +4,20 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="mapStyle.css"/>
-    <!--<link rel="stylesheet" href="mapStyle2.css"/>-->
 </head>
 <body>
-<div class="map_popup " style="width: 300px; display: block; height: 393px; left: 396px; top: 136px;">
+<div class="map_popup " style="width: 300px; display: block; height: 393px; left: 396px; top: 0;">
     <div class="popup_main">
         <div class="title">城市列表</div>
         <div class="content" style="height: 369px; overflow: hidden;">
             <div class="sel_city blueC" onmousedown="T.G('selCityInfo').style.display = 'none'">
                 <div id="selCityTop" style="_width:100%;">
-                    <div class="sel_city_default" id="set_default_city" style="display: block;"><p id="CurCityInfo">
-                        <span>当前城市：信阳市</span><a class="def_city" style="display:inline;" href="javascript:void(0);"
-                                                onclick="SelectCityInst.setDefCity('信阳市',this,1);return false;"
-                                                id="SetDefCity">设为默认城市</a></p>
+                    <div class="sel_city_default" id="set_default_city" style="display: block;">
+                        <p id="CurCityInfo">
+                            <span>当前城市：信阳市</span>
+                            <a class="def_city" style="display:inline;" href="javascript:void(0);"
+                               onclick="SelectCityInst.setDefCity('信阳市',this,1);return false;"
+                               id="SetDefCity">设为默认城市</a></p>
 
                         <p class="default_info" id="DefCityInfo" style="display:none;">您默认的城市是：<a
                                 href="javascript:void(0);"
@@ -49,19 +50,32 @@
                            style="margin-right:5px;*margin-right:1px;">重庆</a>
                     </div>
                     <div class="sel-city-searchbar">
-                        <div class="btnbar"><span href="javascript:void(0)" tid="selCityProvince" id="selCityProvince"
-                                                  class="sel-city-btnl sel-city-btnl-sel">按省份</span> <span
-                                href="javascript:void(0)" tid="selCityCity" id="selCityCity"
-                                class="sel-city-btnr">按城市</span></div>
-                        <form id="selectCity" onsubmit="SelectCityInst.search(this);return false"><input type="text"
-                                                                                                         tid="selCitySearchInput"
-                                                                                                         class="sel-city-searchinput"
-                                                                                                         id="selCityCityWd"
-                                                                                                         name="wd"
-                                                                                                         value="输入城市名"
-                                                                                                         style="color:gray"
-                                                                                                         onfocus="SelectCityInst.wdClick(this)"
-                                                                                                         autocomplete="off">
+                        <div class="btnbar">
+                            <span href="javascript:void(0)" tid="selCityCity" id="selCityDQ"
+                                  class="sel-city-btnl sel-city-btnl-sel">
+                                按地区
+                            </span>
+                            <span href="javascript:void(0)" tid="selCityProvince" id="selCityProvince"
+                                  class="sel-city-btnl">
+                                按省份
+                            </span>
+                            <span
+                                    href="javascript:void(0)" tid="selCityCity" id="selCityCity"
+                                    class="sel-city-btnr">
+                                按城市
+                            </span>
+
+                        </div>
+                        <form id="selectCity" onsubmit="SelectCityInst.search(this);return false">
+                            <input type="text"
+                                   tid="selCitySearchInput"
+                                   class="sel-city-searchinput"
+                                   id="selCityCityWd"
+                                   name="wd"
+                                   value="输入城市名"
+                                   style="color:gray"
+                                   onfocus="SelectCityInst.wdClick(this)"
+                                   autocomplete="off">
                             <span tid="selCitySubmit" id="selCitySubmit" class="sel-city-btn-submit">搜索</span>
 
                             <div id="selCityInfo" class="sel-city-tip">请输入正确的城市名</div>

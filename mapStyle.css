@@ -117,7 +117,7 @@ a, input, select {
 }
 
 .sel_city_default a.def_city {
-    margin-left: 10px;
+    margin-left: 90px;
     text-decoration: underline;
 }
 
@@ -146,9 +146,9 @@ a, input, select {
 
 .sel-city-searchbar .btnbar {
     float: left;
-    width: 108px;
+    /*width: 108px;*/
     height: 23px;
-    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll;
+    /*background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll;*/
     background-position: -302px 0;
 }
 
@@ -157,16 +157,6 @@ a, input, select {
     font-weight: 700;
 }
 
-.sel-city-searchbar .sel-city-btnl, .sel-city-searchbar .sel-city-btnr {
-    float: left;
-    height: 23px;
-    line-height: 23px;
-    width: 54px;
-    margin-left: 0;
-    text-align: center;
-    cursor: pointer;
-    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -1300px -1000px;
-}
 
 .sel-city-searchbar .sel-city-btnr {
     margin-left: -1px;
@@ -180,13 +170,13 @@ a, input, select {
     margin-left: 0;
     text-align: center;
     cursor: pointer;
-    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -1300px -1000px;
+    /*background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -1300px -1000px;*/
 }
 
 .sel-city-searchinput {
     border: 1px solid #ccc;
     height: 20px;
-    width: 121px;
+    width: 61px;
     float: left;
     line-height: 20px;
     text-indent: 4px;
@@ -194,7 +184,7 @@ a, input, select {
 
 .sel-city-btn-submit {
     float: left;
-    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -302px -98px;
+    /*background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -302px -98px;*/
     height: 24px;
     line-height: 24px;
     width: 48px;
