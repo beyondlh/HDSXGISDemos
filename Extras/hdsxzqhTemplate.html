@@ -1,0 +1,129 @@
+<div class="map_popup " style="width: 300px; display: block; height: 393px; left: 396px; top: 0;">
+    <div class="popup_main">
+        <div class="title">城市列表</div>
+        <div class="content" style="height: 369px; overflow: hidden;">
+            <div class="sel_city blueC">
+                <div id="selCityTop" style="_width:100%;">
+                    <div class="sel_city_default" id="set_default_city" style="display: block;">
+                        <p id="CurCityInfo">
+                            <span>当前城市：信阳市</span>
+                            <a class="def_city" style="display:inline;" href="javascript:void(0);"
+                               onclick="SelectCityInst.setDefCity('信阳市',this,1);return false;"
+                               id="SetDefCity">设为默认城市</a></p>
+
+                        <p class="default_info" id="DefCityInfo" style="display:none;">您默认的城市是：<a
+                                href="javascript:void(0);"
+                                onclick="SelectCityInst.selDefCity('131','北京市');return false;">北京市</a><span>[<a
+                                href="javascript:void(0);"
+                                onclick="SelectCityInst.delDefCity('信阳市');return false;">删除</a>]</span></p></div>
+                    <div class="sel-city-searchbar">
+                        <div class="btnbar">
+                            <span href="javascript:void(0)" tid="selCityCity" id="selCityDQ"
+                                  class="sel-city-btnl sel-city-btnl-sel">
+                                按地区
+                            </span>
+                            <span href="javascript:void(0)" tid="selCityProvince" id="selCityProvince"
+                                  class="sel-city-btnl">
+                                按省份
+                            </span>
+                            <span
+                                    href="javascript:void(0)" tid="selCityCity" id="selCityCity"
+                                    class="sel-city-btnr">
+                                按城市
+                            </span>
+
+                        </div>
+                        <form id="selectCity">
+                            <input type="text"
+                                   tid="selCitySearchInput"
+                                   class="sel-city-searchinput"
+                                   id="selCityCityWdselCityCityWd"
+                                   name="wd"
+                                   value="输入城市名"
+                                   style="color:gray"
+                                   autocomplete="off">
+                            <span tid="selCitySubmit" id="selCitySubmit" class="sel-city-btn-submit">搜索</span>
+
+                            <div id="selCityInfo" class="sel-city-tip">请输入正确的城市名</div>
+                        </form>
+                    </div>
+                    <div id="selCityLetterListId" class="sel-city-letterbar"><a href="javascript:void(0)">A</a>
+                        <a href="javascript:void(0)">F</a>
+                        <a href="javascript:void(0)">G</a>
+                        <a href="javascript:void(0)">H</a>
+                        <a href="javascript:void(0)">J</a>
+                        <a href="javascript:void(0)">L</a>
+                        <a href="javascript:void(0)">N</a>
+                        <a href="javascript:void(0)">Q</a>
+                        <a href="javascript:void(0)">S</a>
+                        <a href="javascript:void(0)">T</a>
+                        <a href="javascript:void(0)">X</a>
+                        <a href="javascript:void(0)">Y</a>
+                        <a href="javascript:void(0)">Z</a>
+                        <a href="javascript:void(0)">其它</a>
+                    </div>
+                    <div style="border-top:1px solid #CCC;padding-bottom:10px;"></div>
+                </div>
+                <div id="tangram-scrollpanel--TANGRAM_241-main" class="tangram-scrollpanel-main" data-guid="TANGRAM_241"
+                     style="width: 290px;">
+                    <div id="tangram-scrollpanel--TANGRAM_241" class="tangram-scrollpanel">
+                        <div id="tangram-scrollpanel--TANGRAM_241-panel" class="tangram-scrollpanel-panel"
+                             style="float: left;">
+                            <div id="selCityPlaceListId" style="width: 281px; height: 185px; overflow: hidden;" data-dojo-attach-point="mytable">
+                            </div>
+                        </div>
+                        <div id="tangram-scrollpanel--TANGRAM_241-overflow-y" class="tangram-scrollpanel-overflow-y"
+                             data-guid="TANGRAM_242" style="float: left; width: 9px; margin: 0px; height: 185px;">
+                            <div id="tangram-scrollbar--TANGRAM_242" class="tangram-scrollbar scrollbar-y"
+                                 data-guid="TANGRAM_251" style="display: block; background-position: 3px 0px;">
+                                <div id="tangram-button--TANGRAM_246"
+                                     onmouseover="window['$BAIDU$']._instances['TANGRAM_246']._fireEvent('mouseover', '', '', event)"
+                                     onmouseout="window['$BAIDU$']._instances['TANGRAM_246']._fireEvent('mouseout', '', '', event)"
+                                     onmousedown="window['$BAIDU$']._instances['TANGRAM_246']._fireEvent('mousedown', '', '', event)"
+                                     onmouseup="window['$BAIDU$']._instances['TANGRAM_246']._fireEvent('mouseup', '', '', event)"
+                                     onclick="window['$BAIDU$']._instances['TANGRAM_246']._fireEvent('click', '', '', event)"
+                                     class="tangram-scrollbar-prev scrollbar-y-prev"></div>
+                                <div id="tangram-scrollbar--TANGRAM_242-track"
+                                     class="tangram-scrollbar-track scrollbar-y-track" data-guid="TANGRAM_256"
+                                     style="height: 185px;">
+                                    <div id="tangram-slider--TANGRAM_256"
+                                         class="tangram-scrollbar-slider scrollbar-y-slider"
+                                         onmousedown="window['$BAIDU$']._instances['TANGRAM_256']._mouseDown(event)"
+                                         style="position:relative;">
+                                        <div id="tangram-slider--TANGRAM_256-thumb"
+                                             class="tangram-scrollbar-slider-thumb scrollbar-y-slider-thumb"
+                                             style="position: absolute; top: 0px; height: 13%;" data-guid="TANGRAM_259">
+                                            <div id="tangram-button--TANGRAM_259"
+                                                 onmouseover="window['$BAIDU$']._instances['TANGRAM_259']._fireEvent('mouseover', '', '', event)"
+                                                 onmouseout="window['$BAIDU$']._instances['TANGRAM_259']._fireEvent('mouseout', '', '', event)"
+                                                 onmousedown="window['$BAIDU$']._instances['TANGRAM_259']._fireEvent('mousedown', '', '', event)"
+                                                 onmouseup="window['$BAIDU$']._instances['TANGRAM_259']._fireEvent('mouseup', '', '', event)"
+                                                 onclick="window['$BAIDU$']._instances['TANGRAM_259']._fireEvent('click', '', '', event)"
+                                                 class="tangram-scrollbar-thumb-btn scrollbar-y-thumb-btn"
+                                                 style="background-position: -12px 50%;">
+                                                <div class="tangram-scrollbar-thumb-prev scrollbar-y-thumb-prev"
+                                                     style="background-position: -36px 0px;"></div>
+                                                <div class="tangram-scrollbar-thumb-track scrollbar-y-thumb-track"></div>
+                                                <div class="tangram-scrollbar-thumb-next scrollbar-y-thumb-next"
+                                                     style="background-position: -36px -4px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="tangram-button--TANGRAM_251"
+                                     onmouseover="window['$BAIDU$']._instances['TANGRAM_251']._fireEvent('mouseover', '', '', event)"
+                                     onmouseout="window['$BAIDU$']._instances['TANGRAM_251']._fireEvent('mouseout', '', '', event)"
+                                     onmousedown="window['$BAIDU$']._instances['TANGRAM_251']._fireEvent('mousedown', '', '', event)"
+                                     onmouseup="window['$BAIDU$']._instances['TANGRAM_251']._fireEvent('mouseup', '', '', event)"
+                                     onclick="window['$BAIDU$']._instances['TANGRAM_251']._fireEvent('click', '', '', event)"
+                                     class="tangram-scrollbar-next scrollbar-y-next"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="popup_close" title="关闭"></button>
+    </div>
+    <div class="poput_shadow" style="height: 393px;"></div>
+</div>

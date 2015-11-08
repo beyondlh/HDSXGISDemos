@@ -1,48 +1,182 @@
-[
+var myData = [
     {
-        province: "°²»Õ",
+        provinceName: "å®‰å¾½",
+        belong  : "ååŒ—åœ°åŒº",
         code    : 5785,
-        citys   : ["ºÏ·Ê", "°²Çì", "°ö²º", "ÙñÖİ", "³²ºş", "³ØÖİ", "³üÖİ", "¸·Ñô", "»´±±", "»´ÄÏ", "»ÆÉ½", "Áù°²", "Âí°°É½", "ËŞÖİ", "Í­Áê", "Îßºş", "Ğû³Ç"
+        spel     : "A",
+        citys   : [
+            {name: "åˆè‚¥", pingyin: "hefei"},
+            {name: "å®‰åº†", pingyin: "anqing"},
+            {name: "èšŒåŸ ", pingyin: "bengbeng"},
+            {name: "äº³å·", pingyin: "haozhou"},
+            {name: "å·¢æ¹–", pingyin: "chaohu"},
+            {name: "æ± å·", pingyin: "chizhou"},
+            {name: "æ»å·", pingyin: "chuzhou"},
+            {name: "é˜œé˜³", pingyin: "fuyang"},
+            {name: "æ·®åŒ—", pingyin: "huaibei"},
+            {name: "æ·®å—", pingyin: "huainan"},
+            {name: "é»„å±±", pingyin: "huangshan"},
+            {name: "å…­å®‰", pingyin: "liuan"},
+            {name: "é©¬éå±±", pingyin: "maanshan"},
+            {name: "å®¿å·", pingyin: "suzhou"},
+            {name: "é“œé™µ", pingyin: "tongling"},
+            {name: "èŠœæ¹–", pingyin: "wuhu"},
+            {name: "å®£åŸ", pingyin: "xuancheng"}
         ]
     },
     {
-        province: "¸£½¨",
+        provinceName: "ç¦å»º",
+        belong  : "",
         code    : 5785,
-        citys   : ["¸£Öİ", "ÁúÑÒ", "ÄÏÆ½", "ÄşµÂ", "ÆÎÌï", "ÈªÖİ", "ÈıÃ÷", "ÏÃÃÅ", "ÕÄÖİ"]
-    },
-    {
-        province: "¹ã¶«",
-        code    : 5776,
-        citys   : ["¹ãÖİ", "³±Öİ", "¶«İ¸", "·ğÉ½", "ºÓÔ´", "»İÖİ", " ½­ÃÅ", "½ÒÑô", "Ã¯Ãû", " Ã·Öİ", "ÇåÔ¶", "ÉÇÍ·", "ÉÇÎ²", "ÉØ¹Ø", "ÉîÛÚ", "Ñô½­", "ÔÆ¸¡", "Õ¿½­", "ÕØÇì", "ÖĞÉ½", "Öéº£"]
-    },
-    {
-        province: "¹ãÎ÷",
-        code    : 5786,
-        citys   : ["ÄÏÄş", "°ÙÉ«", "±±º£", "³ç×ó", "·À³Ç¸Û", "¹ğÁÖ", "¹ó¸Û", "ºÓ³Ø", "ºØÖİ", "À´±ö", "ÁøÖİ", "ÇÕÖİ", "ÎàÖİ", "ÓñÁÖ"]
-    },
-    {
-        province: "¹óÖİ",
-        code    : 5793,
-        citys   : ["¹óÑô", "°²Ë³", "±Ï½ÚµØÇø", "ÁùÅÌË®", "Í­ÈÊµØÇø", "×ñÒå", "Ç­Î÷ÄÏÖİ", "Ç­¶«ÄÏÖİ", "Ç­ÄÏÖİ"]
-    },
-    {
-        province: "¸ÊËà",
-        code    : 5775,
-        citys   : ["À¼Öİ", "°×Òø", "¶¨Î÷", "¸ÊÄÏÖİ", "¼ÎÓø¹Ø", "½ğ²ı", "¾ÆÈª", "ÁÙÏÄÖİ", "Â¤ÄÏ", "Æ½Á¹", "ÇìÑô", "ÌìË®", "ÎäÍş", "ÕÅÒ´"]
-    },
-    {
-        province: "º£ÄÏ",
-        code    : 5790,
+        spel     : "F",
         citys   : [
-            {
-            "city"   : "º£¿Ú",
-            "pingyin": "haikou"
-        }, "{}º£¿Ú", "°×É³", "±£Í¤", "²ı½­", "ÙÙÖİ", "³ÎÂõ", "¶«·½", "¶¨°²", "Çíº£", "ÇíÖĞ", "ÀÖ¶«", "ÁêË®", "ÈıÑÇ", "ÍÍ²ı", "ÍòÄş", "ÎÄ²ı",
-            "ÎåÖ¸É½"]
+            {name: "ç¦å·", pingyin: "fuzhou"},
+            {name: "é¾™å²©", pingyin: "longyan"},
+            {name: "å—å¹³", pingyin: "nanping"},
+            {name: "å®å¾·", pingyin: "ningde"},
+            {name: "è†ç”°", pingyin: "putian"},
+            {name: "æ³‰å·", pingyin: "quanzhou"},
+            {name: "ä¸‰æ˜", pingyin: "sanming"},
+            {name: "å¦é—¨", pingyin: "xiamen"},
+            {name: "æ¼³å·", pingyin: "zhangzhou"}
+        ]
     },
     {
-        province: "ºÓÄÏ",
+        provinceName: "å¹¿ä¸œ",
+        belong  : "",
+        code    : 5776,
+        spel     : "G",
+        citys   : [
+            {name: "å¹¿å·", pingyin: "guangzhou"},
+            {name: "æ½®å·", pingyin: "chaozhou"},
+            {name: "ä¸œè", pingyin: "dongguan"},
+            {name: "ä½›å±±", pingyin: "foshan"},
+            {name: "æ²³æº", pingyin: "heyuan"},
+            {name: "æƒ å·", pingyin: "huizhou"},
+            {name: "æ±Ÿé—¨", pingyin: "jiangmen"},
+            {name: "æ­é˜³", pingyin: "jieyang"},
+            {name: "èŒ‚å", pingyin: "maoming"},
+            {name: "æ¢…å·", pingyin: "meizhou"},
+            {name: "æ¸…è¿œ", pingyin: "qingyuan"},
+            {name: "æ±•å¤´", pingyin: "shantou"},
+            {name: "æ±•å°¾", pingyin: "shanwei"},
+            {name: "éŸ¶å…³", pingyin: "shaoguan"},
+            {name: "æ·±åœ³", pingyin: "shenzhen"},
+            {name: "é˜³æ±Ÿ", pingyin: "yangjiang"},
+            {name: "äº‘æµ®", pingyin: "yunfu"},
+            {name: "æ¹›æ±Ÿ", pingyin: "zhanjiang"},
+            {name: "è‚‡åº†", pingyin: "zhaoqing"},
+            {name: "ä¸­å±±", pingyin: "zhongshan"},
+            {name: "ç æµ·", pingyin: "zhuhai"}
+        ]
+    },
+    {
+        provinceName: "å¹¿è¥¿",
+        belong  : "",
+        code    : 5786,
+        spel     : "G",
+        citys   : [
+            {name: "å—å®", pingyin: "nanning"},
+            {name: "ç™¾è‰²", pingyin: "baise"},
+            {name: "åŒ—æµ·", pingyin: "beihai"},
+            {name: "å´‡å·¦", pingyin: "congzuo"},
+            {name: "é˜²åŸæ¸¯", pingyin: "fangchenggang"},
+            {name: "æ¡‚æ—", pingyin: "guilin"},
+            {name: "è´µæ¸¯", pingyin: "guiyang"},
+            {name: "æ²³æ± ", pingyin: "hechi"},
+            {name: "è´ºå·", pingyin: "hezhou"},
+            {name: "æ¥å®¾", pingyin: "laibin"},
+            {name: "æŸ³å·", pingyin: "louzhou"},
+            {name: "é’¦å·", pingyin: "qinzhou"},
+            {name: "æ¢§å·", pingyin: "wuzhou"},
+            {name: "ç‰æ—", pingyin: "yulin"}
+        ]
+    },
+    {
+        provinceName: "è´µå·",
+        belong  : "",
+        code    : 5793,
+        spel     : "G",
+        citys   : [
+            {name: "è´µé˜³", pingyin: "guiyang"},
+            {name: "å®‰é¡º", pingyin: "anshun"},
+            {name: "æ¯•èŠ‚åœ°åŒº", pingyin: "bijiediqu"},
+            {name: "å…­ç›˜æ°´", pingyin: "liupanshui"},
+            {name: "é“œä»åœ°åŒº", pingyin: "tongrendiqu"},
+            {name: "éµä¹‰", pingyin: "zunyi"},
+            {name: "é»”è¥¿å—å·", pingyin: "qianxinanzhou"},
+            {name: "é»”ä¸œå—å·", pingyin: "qiandongnanzhou"},
+            {name: "é»”å—å·", pingyin: "qiannanzhou"}
+        ]
+    },
+    {
+        provinceName: "ç”˜è‚ƒ",
+        belong  : "",
+        code    : 5775,
+        spel     : "G",
+        citys   : [
+            {name: "å…°å·", pingyin: "lanzhou"},
+            {name: "ç™½é“¶", pingyin: "banyin"},
+            {name: "å®šè¥¿", pingyin: "dingxi"},
+            {name: "ç”˜å—å·", pingyin: "gannanzhou"},
+            {name: "å˜‰å³ªå…³", pingyin: "jiayuguan"},
+            {name: "é‡‘æ˜Œ", pingyin: "jinchang"},
+            {name: "é…’æ³‰", pingyin: "jiuquan"},
+            {name: "ä¸´å¤å·", pingyin: "linxiazhou"},
+            {name: "é™‡å—", pingyin: "longnan"},
+            {name: "å¹³å‡‰", pingyin: "pinliang"},
+            {name: "åº†é˜³", pingyin: "qingyang"},
+            {name: "å¤©æ°´", pingyin: "tianshui"},
+            {name: "æ­¦å¨", pingyin: "wuwei"},
+            {name: "å¼ æ–", pingyin: "zhangye"}
+        ]
+    },
+    {
+        provinceName: "æµ·å—",
+        code    : 5790,
+        spel     : "H",
+        citys   : [
+            {name: "æµ·å£", pingyin: "haikou"},
+            {name: "ç™½æ²™", pingyin: "baisha"},
+            {name: "ä¿äº­", pingyin: "baoting"},
+            {name: "æ˜Œæ±Ÿ", pingyin: "changjiang"},
+            {name: "å„‹å·", pingyin: "zhanzhou"},
+            {name: "æ¾„è¿ˆ", pingyin: "chengmai"},
+            {name: "ä¸œæ–¹", pingyin: "dongfang"},
+            {name: "å®šå®‰", pingyin: "dingan"},
+            {name: "ç¼æµ·", pingyin: "qionghai"},
+            {name: "ç¼ä¸­", pingyin: "qiongzhong"},
+            {name: "ä¹ä¸œ", pingyin: "ledong"},
+            {name: "é™µæ°´", pingyin: "lingshui"},
+            {name: "ä¸‰äºš", pingyin: "sanya"},
+            {name: "å±¯æ˜Œ", pingyin: "tunchang"},
+            {name: "ä¸‡å®", pingyin: "wanning"},
+            {name: "æ–‡æ˜Œ", pingyin: "wenchang"},
+            {name: "äº”æŒ‡å±±", pingyin: "wuzhishan"}
+        ]
+    },
+    {
+        provinceName: "æ²³å—",
         code    : 5799,
-        citys   : ["Ö£Öİ", "°²Ñô", "º×±Ú", "½¹×÷", "¿ª·â", "ÂåÑô", "äğºÓ", "ÄÏÑô", "Æ½¶¥É½", "å§Ñô", "ÈıÃÅÏ¿", "ÉÌÇğ", "ĞÂÏç", "ĞÅÑô", "Ğí²ı", "ÖÜ¿Ú", "×¤Âíµê"]
+        spel     : "H",
+        citys   : [
+            {name: "éƒ‘å·", pingyin: "zhengzhou"},
+            {name: "å®‰é˜³", pingyin: "anyang"},
+            {name: "é¹¤å£", pingyin: "hebi"},
+            {name: "ç„¦ä½œ", pingyin: "jiaozuo"},
+            {name: "å¼€å°", pingyin: "kaifeng"},
+            {name: "æ´›é˜³", pingyin: "luoyang"},
+            {name: "æ¼¯æ²³", pingyin: "luohe"},
+            {name: "å—é˜³", pingyin: "nanyang"},
+            {name: "å¹³é¡¶å±±", pingyin: "pingdingshan"},
+            {name: "æ¿®é˜³", pingyin: "puyang"},
+            {name: "ä¸‰é—¨å³¡", pingyin: "sanmenxia"},
+            {name: "å•†ä¸˜", pingyin: "shangqiu"},
+            {name: "æ–°ä¹¡", pingyin: "xinxiang"},
+            {name: "ä¿¡é˜³", pingyin: "xinyang"},
+            {name: "è®¸æ˜Œ", pingyin: "xuchang"},
+            {name: "å‘¨å£", pingyin: "zhoukou"},
+            {name: "é©»é©¬åº—", pingyin: "zhumadian"}
+        ]
     }
 ]
