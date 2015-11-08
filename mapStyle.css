@@ -102,11 +102,6 @@ a, input, select {
     margin: 7px 5px 5px;
 }
 
-.tangram-scrollpanel-main {
-    overflow: hidden;
-    zoom: 1;
-    position: relative;
-}
 
 .sel_city_default {
     display: none;
@@ -121,11 +116,7 @@ a, input, select {
     text-decoration: underline;
 }
 
-.sel_city a {
-    white-space: nowrap;
-    margin-right: 9px;
-    line-height: 18px;
-}
+
 
 
 
@@ -314,14 +305,6 @@ img, table {
     padding: 0 14px 0 7px;
 }
 
-.sel_city td {
-    vertical-align: top;
-}
-
-.sel_city td, .sel_city tr {
-    margin: 0;
-    padding: 0;
-}
 
 .sel_city td.sel-city-td-sf {
     padding-right: 8px;
@@ -331,19 +314,16 @@ img, table {
     font-weight: 700;
 }
 
+.sel_city td, .sel_city tr {
+    margin: 0;
+    padding: 0;
+}
+
+
 .sel_city td {
     vertical-align: top;
 }
 
-.sel_city td, .sel_city tr {
-    margin: 0;
-    padding: 0;
-}
-
-.sel_city td, .sel_city tr {
-    margin: 0;
-    padding: 0;
-}
 .sel-city-td-letter div {
     font-size: 24px;
     line-height: 24px;
@@ -366,4 +346,8 @@ img, table {
 .sel-city-tr-splitline {
     height: 12px;
     visibility: hidden;
+}
+
+.mycityesClass a{
+    white-space: normal;
 }

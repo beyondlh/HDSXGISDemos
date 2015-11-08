@@ -1,10 +1,10 @@
 var myData = [
     {
         provinceName: "安徽",
-        belong  : "华北地区",
-        code    : 5785,
-        spel     : "A",
-        citys   : [
+        belong      : "华北地区",
+        code        : 5785,
+        spel        : "A",
+        citys       : [
             {name: "合肥", pingyin: "hefei"},
             {name: "安庆", pingyin: "anqing"},
             {name: "蚌埠", pingyin: "bengbeng"},
@@ -26,10 +26,10 @@ var myData = [
     },
     {
         provinceName: "福建",
-        belong  : "",
-        code    : 5785,
-        spel     : "F",
-        citys   : [
+        belong      : "",
+        code        : 5785,
+        spel        : "F",
+        citys       : [
             {name: "福州", pingyin: "fuzhou"},
             {name: "龙岩", pingyin: "longyan"},
             {name: "南平", pingyin: "nanping"},
@@ -43,10 +43,10 @@ var myData = [
     },
     {
         provinceName: "广东",
-        belong  : "",
-        code    : 5776,
-        spel     : "G",
-        citys   : [
+        belong      : "",
+        code        : 5776,
+        spel        : "G",
+        citys       : [
             {name: "广州", pingyin: "guangzhou"},
             {name: "潮州", pingyin: "chaozhou"},
             {name: "东莞", pingyin: "dongguan"},
@@ -72,10 +72,10 @@ var myData = [
     },
     {
         provinceName: "广西",
-        belong  : "",
-        code    : 5786,
-        spel     : "G",
-        citys   : [
+        belong      : "",
+        code        : 5786,
+        spel        : "G",
+        citys       : [
             {name: "南宁", pingyin: "nanning"},
             {name: "百色", pingyin: "baise"},
             {name: "北海", pingyin: "beihai"},
@@ -94,10 +94,10 @@ var myData = [
     },
     {
         provinceName: "贵州",
-        belong  : "",
-        code    : 5793,
-        spel     : "G",
-        citys   : [
+        belong      : "",
+        code        : 5793,
+        spel        : "G",
+        citys       : [
             {name: "贵阳", pingyin: "guiyang"},
             {name: "安顺", pingyin: "anshun"},
             {name: "毕节地区", pingyin: "bijiediqu"},
@@ -111,10 +111,10 @@ var myData = [
     },
     {
         provinceName: "甘肃",
-        belong  : "",
-        code    : 5775,
-        spel     : "G",
-        citys   : [
+        belong      : "",
+        code        : 5775,
+        spel        : "G",
+        citys       : [
             {name: "兰州", pingyin: "lanzhou"},
             {name: "白银", pingyin: "banyin"},
             {name: "定西", pingyin: "dingxi"},
@@ -133,9 +133,9 @@ var myData = [
     },
     {
         provinceName: "海南",
-        code    : 5790,
-        spel     : "H",
-        citys   : [
+        code        : 5790,
+        spel        : "H",
+        citys       : [
             {name: "海口", pingyin: "haikou"},
             {name: "白沙", pingyin: "baisha"},
             {name: "保亭", pingyin: "baoting"},
@@ -157,9 +157,9 @@ var myData = [
     },
     {
         provinceName: "河南",
-        code    : 5799,
-        spel     : "H",
-        citys   : [
+        code        : 5799,
+        spel        : "H",
+        citys       : [
             {name: "郑州", pingyin: "zhengzhou"},
             {name: "安阳", pingyin: "anyang"},
             {name: "鹤壁", pingyin: "hebi"},
@@ -179,4 +179,4 @@ var myData = [
             {name: "驻马店", pingyin: "zhumadian"}
         ]
     }
-]
+];
