@@ -7,13 +7,14 @@ define(["dojo/_base/declare",
         "dojo/query",
         "dojo/on",
         "dojo/dom",
+        "dojo/topic",
         "dojo/dom-construct",
         "dojo/dom-class",
         "dojo/dom-style",
         "dijit/_WidgetBase",
         "dijit/_TemplatedMixin",
         "dojo/text!./hdsxzqhTemplate.html", "dojo/domReady!"],
-    function (declare, lang, array, query, on, dom, domConstruct, domClass, domStyle, _WidgetBase, _TemplatedMixin, template) {
+    function (declare, lang, array, query, on, dom, topic, domConstruct, domClass, domStyle, _WidgetBase, _TemplatedMixin, template) {
         return declare([_WidgetBase, _TemplatedMixin], {
             templateString             : template,
             selectedCity               : "",//当前选中的城市
@@ -213,21 +214,30 @@ define(["dojo/_base/declare",
             },
 
             bindSelect: function () {
-                var cityDoms = query("td.myForQureyUse");
-                if (cityDoms.length === 0) {
-                    var myInterval = setInterval(this.bindSelect, 100);
-                } else {
-                    window.clearInterval(myInterval)
+                var interval = null;
+                var cityDoms = query("td.myForQureyUse", this.myTable);
+                if (cityDoms.length == 0) {
+                    interval = setInterval(function () {
+                        cityDoms = query("td.myForQureyUse", this.myTable);
+                        if (cityDoms.length !== 0) {
+                            topic.publish("myForQureyUseReady", cityDoms);
+                            window.clearInterval(interval);
+                        }
+                    }, 500);
+                }else{
+                    topic.publish("myForQureyUseReady", cityDoms);
+                }
+                topic.subscribe("myForQureyUseReady", lang.hitch(this, function (objDom) {
                     if (this.cityClickListener) {
                         this.cityClickListener.remove();
                     }
-                    this.cityClickListener = on(cityDoms, "click", lang.hitch(this, function (evt) {
+                    this.cityClickListener = on(objDom, "click", lang.hitch(this, function (evt) {
                         if (evt.path[0].tagName === "A") {
                             this.selectedCity = evt.path[0].innerText;
                             console.info("当前选中的城市为:", this.selectedCity);
                         }
                     }));
-                }
+                }));
 
             }
         });
