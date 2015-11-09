@@ -34,6 +34,7 @@ define(["dojo/_base/declare",
                     }));
                 }
                 this.showByProvince();
+                var self = this;
                 $(this.selCityCityWdselCityCityWd).autocomplete(this.pingyinData, {
                     max          : 10,    //列表里的条目数
                     minChars     : 1,    //自动完成激活之前填入的最小字符
@@ -51,6 +52,8 @@ define(["dojo/_base/declare",
                         return row.name;
                     }
                 }).result(function (event, row, formatted) {
+                    self.selectedCity = row.name;
+                    console.info("当前选中的城市为", self.selectedCity);
                 });
             },
 
@@ -86,6 +89,11 @@ define(["dojo/_base/declare",
                         this.showByCitys();
                     }
                 }
+                var cityDoms = query("td.myProvinceCityesClass");
+                on(cityDoms, "click", lang.hitch(this, function (event) {
+                    this.selectedCity = event.path[0].innerText;
+                    console.info("当前选中的城市为:", this.selectedCity);
+                }));
             },
 
             showByRegion  : function () {
@@ -96,7 +104,6 @@ define(["dojo/_base/declare",
             },
             showByCitys   : function () {
                 domConstruct.empty(this.mytable);
-
                 var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody'></tbody></table>";
                 var myTable       = domConstruct.toDom(table);
                 var tbodyToInsert = query("tbody.myCitysXZQHtbody", myTable)[0];
@@ -130,10 +137,8 @@ define(["dojo/_base/declare",
                         templateCityTemp.innerHTML = city.name;
                         domConstruct.place(templateCityTemp, cityToInsertDom, "last");
                     }));
-
                 }));
                 this.selectType  = "byCity";
-
             },
             showByProvince: function () {
                 domConstruct.empty(this.mytable);

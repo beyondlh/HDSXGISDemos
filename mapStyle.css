@@ -9,30 +9,41 @@ body {
     height: 100%;
     overflow: hidden;
 }
+
 body.pc {
-    font-family: Arial,Helvetica,SimSun,sans-serif;
+    font-family: Arial, Helvetica, SimSun, sans-serif;
 }
 
 form, p, ol, ul, li, dl, dt, dd, h1, h2, h3, h4, tr, th, td, input {
     margin: 0;
     padding: 0;
 }
+
 a {
     color: #00c;
     text-decoration: underline;
     outline: 0;
     cursor: pointer;
 }
+
 a, input, select {
     font-size: 12px;
 }
+
 .blueC a {
     color: #3d6dcc;
     text-decoration: none;
 }
+
+.blueC a:hover {
+    color: #3d6dcc;
+    text-decoration: underline;
+}
+
 .scrollbar-y {
     background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 3px center;
 }
+
 .scrollbar-y-prev {
     width: 9px;
     height: 0;
@@ -102,7 +113,6 @@ a, input, select {
     margin: 7px 5px 5px;
 }
 
-
 .sel_city_default {
     display: none;
     border-bottom: 1px solid #CCC;
@@ -115,10 +125,6 @@ a, input, select {
     margin-left: 90px;
     text-decoration: underline;
 }
-
-
-
-
 
 .sel-city-hotcity {
     padding: 0 5px;
@@ -147,7 +153,6 @@ a, input, select {
     background-position: -302px -24px;
     font-weight: 700;
 }
-
 
 .sel-city-searchbar .sel-city-btnr {
     margin-left: -1px;
@@ -291,9 +296,10 @@ img, table {
     font-size: 0;
     background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) -36px 0;
 }
+
 .scrollbar-y-thumb-next {
     position: absolute;
-    bottom: 0!important;
+    bottom: 0 !important;
     bottom: -1px;
     width: 100%;
     height: 4px;
@@ -304,7 +310,6 @@ img, table {
 .sel_city td.sel-city-td-letter {
     padding: 0 14px 0 7px;
 }
-
 
 .sel_city td.sel-city-td-sf {
     padding-right: 8px;
@@ -318,7 +323,6 @@ img, table {
     margin: 0;
     padding: 0;
 }
-
 
 .sel_city td {
     vertical-align: top;
@@ -336,6 +340,7 @@ img, table {
 .sel_city .sel-city-td-sf a {
     margin: 0;
 }
+
 .sel_city a {
     white-space: nowrap;
     margin-right: 9px;
@@ -348,6 +353,6 @@ img, table {
     visibility: hidden;
 }
 
-.myProvinceCityesClass a{
+.myProvinceCityesClass a {
     white-space: normal;
 }
