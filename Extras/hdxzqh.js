@@ -100,6 +100,42 @@ define(["dojo/_base/declare",
                 }
 
                 this.bindSelect();
+
+
+                var myTable = query("table", this.mytable)[0];
+                on(myTable, "mousewheel", lang.hitch(this, function (e) {
+                    //得到当前table的高度
+                    //debugger;
+                    var myTableHeight = domStyle.get(myTable, "height");
+                    //往上滚动，y值为负
+                    var top  = domStyle.get(this.myScrollDom, "top");
+                    if (top == 0 && e.deltaY > 0) {
+                        domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
+                    } else if (top == 0 && e.deltaY < 0) {
+                        return;
+                    } else if (top == this.scrollHeight && e.deltaY < 0) {
+                        domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
+                    } else if (top == this.scrollHeight && e.deltaY > 0) {
+                        return;
+                    } else {
+                        if (e.deltaY < 0) {
+                            domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
+                        } else {
+                            domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
+                        }
+                    }
+
+                    this.checkStyle();
+                    var bili = myTableHeight / this.scrollHeight;
+                    console.info("比例", bili);
+                    var top2 = domStyle.get(this.myScrollDom, "top");
+                    domStyle.set(myTable, "top", -top2 * bili + "px");
+                }));
+                on(this.myScroolbarDom, "click", lang.hitch(this, function (e) {
+                    domStyle.set(this.myScrollDom, "top", e.layerY - 10 + "px");
+                    this.checkStyle();
+                }));
+
             },
 
             showByRegion  : function () {
@@ -183,38 +219,6 @@ define(["dojo/_base/declare",
                         templateCityTemp.innerHTML = city.name;
                         domConstruct.place(templateCityTemp, cityToInsertDom, "last");
                     });
-                }));
-
-                on(myTable, "mousewheel", lang.hitch(this, function (e) {
-                    //得到当前table的高度
-                    var myTableHeight = domStyle.get(myTable, "height");
-                    //往上滚动，y值为负
-                    var top  = domStyle.get(this.myScrollDom, "top");
-                    if (top == 0 && e.deltaY > 0) {
-                        domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
-                    } else if (top == 0 && e.deltaY < 0) {
-                        return;
-                    } else if (top == this.scrollHeight && e.deltaY < 0) {
-                        domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
-                    } else if (top == this.scrollHeight && e.deltaY > 0) {
-                        return;
-                    } else {
-                        if (e.deltaY < 0) {
-                            domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
-                        } else {
-                            domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
-                        }
-                    }
-
-                    this.checkStyle();
-                    var bili = myTableHeight / this.scrollHeight;
-                    console.info("比例",bili);
-                    var top2 = domStyle.get(this.myScrollDom, "top");
-                    domStyle.set(myTable, "top", -top2 * bili + "px");
-                }));
-                on(this.myScroolbarDom, "click", lang.hitch(this, function (e) {
-                    domStyle.set(this.myScrollDom, "top", e.layerY - 10 + "px");
-                    this.checkStyle();
                 }));
                 this.selectType  = "byProvince";
             },
