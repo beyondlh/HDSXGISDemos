@@ -17,6 +17,8 @@ define(["dojo/_base/declare",
     function (declare, lang, array, query, on, dom, topic, domConstruct, domClass, domStyle, _WidgetBase, _TemplatedMixin, template) {
         return declare([_WidgetBase, _TemplatedMixin], {
             templateString             : template,
+            scrollHeight               : 160,
+            scrollStep                 : 16,
             selectedCity               : "",//当前选中的城市
             selectType                 : "",
             previousPorvinceFirstLetter: null,
@@ -66,8 +68,8 @@ define(["dojo/_base/declare",
                 var top = domStyle.get(this.myScrollDom, "top");
                 if (top < 0) {
                     domStyle.set(this.myScrollDom, "top", "0px");
-                } else if (top > 160) {
-                    domStyle.set(this.myScrollDom, "top", "160px");
+                } else if (top > this.scrollHeight) {
+                    domStyle.set(this.myScrollDom, "top", this.scrollHeight + "px");
                 }
             },
 
@@ -184,27 +186,31 @@ define(["dojo/_base/declare",
                 }));
 
                 on(myTable, "mousewheel", lang.hitch(this, function (e) {
+                    //得到当前table的高度
+                    var myTableHeight = domStyle.get(myTable, "height");
                     //往上滚动，y值为负
                     var top  = domStyle.get(this.myScrollDom, "top");
                     if (top == 0 && e.deltaY > 0) {
-                        domStyle.set(this.myScrollDom, "top", top + 16 + "px");
+                        domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
                     } else if (top == 0 && e.deltaY < 0) {
                         return;
-                    } else if (top == 160 && e.deltaY < 0) {
-                        domStyle.set(this.myScrollDom, "top", top - 16 + "px");
-                    } else if (top == 160 && e.deltaY > 0) {
+                    } else if (top == this.scrollHeight && e.deltaY < 0) {
+                        domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
+                    } else if (top == this.scrollHeight && e.deltaY > 0) {
                         return;
                     } else {
                         if (e.deltaY < 0) {
-                            domStyle.set(this.myScrollDom, "top", top - 16 + "px");
+                            domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
                         } else {
-                            domStyle.set(this.myScrollDom, "top", top + 16 + "px");
+                            domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
                         }
                     }
 
                     this.checkStyle();
+                    var bili = myTableHeight / this.scrollHeight;
+                    console.info("比例",bili);
                     var top2 = domStyle.get(this.myScrollDom, "top");
-                    domStyle.set(myTable, "top", -top2 + "px");
+                    domStyle.set(myTable, "top", -top2 * bili + "px");
                 }));
                 on(this.myScroolbarDom, "click", lang.hitch(this, function (e) {
                     domStyle.set(this.myScrollDom, "top", e.layerY - 10 + "px");
@@ -224,7 +230,7 @@ define(["dojo/_base/declare",
                             window.clearInterval(interval);
                         }
                     }, 500);
-                }else{
+                } else {
                     topic.publish("myForQureyUseReady", cityDoms);
                 }
                 topic.subscribe("myForQureyUseReady", lang.hitch(this, function (objDom) {
