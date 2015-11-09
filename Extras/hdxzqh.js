@@ -143,6 +143,11 @@ define(["dojo/_base/declare",
                     this.checkStyle();
                     topic.publish("scrollTopChanged", "");
                 }));
+
+                //模拟滚动条的拖动
+                on(this.myScroolbarDom, "", lang.hitch(this, function () {
+
+                }));
             },
 
 

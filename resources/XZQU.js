@@ -228,21 +228,21 @@ var myData = [
         code        : 5794,
         spel        : "H",
         citys       : [
-            {name: "长沙", pingyin: "shijiazhuang"},
-            {name: "常德", pingyin: "baoding"},
-            {name: "郴州", pingyin: "cangzhou"},
-            {name: "衡阳", pingyin: "chengde"},
-            {name: "怀化", pingyin: "handan"},
-            {name: "娄底", pingyin: "hengshui"},
-            {name: "邵阳", pingyin: "langfang"},
-            {name: "湘潭", pingyin: "qinghuangdao"},
-            {name: "湘西州", pingyin: "tangshan"},
-            {name: "益阳", pingyin: "xingtai"},
-            {name: "永州", pingyin: "zhangjiakou"},
+            {name: "长沙", pingyin: "changsha"},
+            {name: "常德", pingyin: "changde"},
+            {name: "郴州", pingyin: "haozhou"},
+            {name: "衡阳", pingyin: "hengyang"},
+            {name: "怀化", pingyin: "huaihua"},
+            {name: "娄底", pingyin: "loudi"},
+            {name: "邵阳", pingyin: "shaoyang"},
+            {name: "湘潭", pingyin: "xiangtan"},
+            {name: "湘西州", pingyin: "xiangxizhou"},
+            {name: "益阳", pingyin: "yiyang"},
+            {name: "永州", pingyin: "yongzhou"},
 
-            {name: "岳阳", pingyin: "qinghuangdao"},
-            {name: "张家界", pingyin: "tangshan"},
-            {name: "株洲", pingyin: "xingtai"}
+            {name: "岳阳", pingyin: "yueyang"},
+            {name: "张家界", pingyin: "zhangjiajie"},
+            {name: "株洲", pingyin: "chenzhou"}
         ]
     },
     {
