@@ -30,6 +30,27 @@ define(["dojo/_base/declare",
             postCreate                 : function () {
                 this.inherited(arguments);
                 this._selectPattern();
+                this._scrollHandler();
+                this._bindAutoComplete();
+            },
+
+            startup: function () {
+                this.inherited(arguments);
+            },
+
+            checkStyle: function () {
+                var top = domStyle.get(this.myScrollDom, "top");
+                if (top < 0) {
+                    domStyle.set(this.myScrollDom, "top", "0px");
+                    topic.publish("scrollTopChanged", "");
+                } else if (top > this.scrollHeight) {
+                    domStyle.set(this.myScrollDom, "top", this.scrollHeight + "px");
+                    topic.publish("scrollTopChanged", "");
+                }
+            },
+
+
+            _bindAutoComplete: function () {
                 if (this.pingyinData.length === 0) {
                     array.forEach(myData, lang.hitch(this, function (item) {
                         array.forEach(item.citys, lang.hitch(this, function (city) {
@@ -37,6 +58,7 @@ define(["dojo/_base/declare",
                         }));
                     }));
                 }
+
                 var self = this;
                 $(this.selCityCityWdselCityCityWd).autocomplete(this.pingyinData, {
                     max          : 10,    //列表里的条目数
@@ -60,21 +82,8 @@ define(["dojo/_base/declare",
                 });
             },
 
-            startup: function () {
-                this.inherited(arguments);
-            },
-
-            checkStyle: function () {
-                var top = domStyle.get(this.myScrollDom, "top");
-                if (top < 0) {
-                    domStyle.set(this.myScrollDom, "top", "0px");
-                } else if (top > this.scrollHeight) {
-                    domStyle.set(this.myScrollDom, "top", this.scrollHeight + "px");
-                }
-            },
-
             _selectPattern: function (event) {
-                //debugger;
+                domStyle.set(this.myScrollDom, "top", "0px");
                 var className = "sel-city-btnl-sel";
                 domClass.remove(this.byRegionDom, className);
                 domClass.remove(this.byProvinceDom, className);
@@ -101,14 +110,13 @@ define(["dojo/_base/declare",
 
                 this.bindSelect();
 
-
                 var myTable = query("table", this.mytable)[0];
-                on(myTable, "mousewheel", lang.hitch(this, function (e) {
-                    //得到当前table的高度
-                    //debugger;
-                    var myTableHeight = domStyle.get(myTable, "height");
+                if (this.mousewheelListener) {
+                    this.mousewheelListener.remove();
+                }
+                this.mousewheelListener = on(myTable, "mousewheel", lang.hitch(this, function (e) {
                     //往上滚动，y值为负
-                    var top  = domStyle.get(this.myScrollDom, "top");
+                    var top = domStyle.get(this.myScrollDom, "top");
                     if (top == 0 && e.deltaY > 0) {
                         domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
                     } else if (top == 0 && e.deltaY < 0) {
@@ -124,24 +132,38 @@ define(["dojo/_base/declare",
                             domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
                         }
                     }
-
                     this.checkStyle();
-                    var bili = myTableHeight / this.scrollHeight;
-                    console.info("比例", bili);
-                    var top2 = domStyle.get(this.myScrollDom, "top");
-                    domStyle.set(myTable, "top", -top2 * bili + "px");
+                    topic.publish("scrollTopChanged", "");
                 }));
-                on(this.myScroolbarDom, "click", lang.hitch(this, function (e) {
+                if (this.mouseClickScroolHandler) {
+                    this.mouseClickScroolHandler.remove();
+                }
+                this.mouseClickScroolHandler = on(this.myScroolbarDom, "click", lang.hitch(this, function (e) {
                     domStyle.set(this.myScrollDom, "top", e.layerY - 10 + "px");
                     this.checkStyle();
+                    topic.publish("scrollTopChanged", "");
                 }));
-
             },
 
-            showByRegion  : function () {
+
+            _scrollHandler: function () {
+                topic.subscribe("scrollTopChanged", lang.hitch(this, function () {
+                    //显示的表格的高度
+                    var hei     = domStyle.get(this.mytable, "height");
+                    var myTable = query("table", this.mytable)[0];
+                    //得到当前table的高度
+                    var myTableHeight = domStyle.get(myTable, "height");
+                    var bili          = (myTableHeight - hei) / this.scrollHeight;
+                    var top2          = domStyle.get(this.myScrollDom, "top");
+                    domStyle.set(myTable, "top", -top2 * bili + "px");
+                }));
+            },
+
+            showByRegion: function () {
                 domConstruct.empty(this.mytable);
                 this.selectType = "byRegion";
             },
+
             showByCitys   : function () {
                 domConstruct.empty(this.mytable);
                 var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody'></tbody></table>";
