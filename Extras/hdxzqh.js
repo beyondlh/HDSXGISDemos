@@ -17,7 +17,7 @@ define(["dojo/_base/declare",
         return declare([_WidgetBase, _TemplatedMixin], {
             templateString             : template,
             selectedCity               : "",//当前选中的城市
-            selectType                 : "byPorvince",
+            selectType                 : "",
             previousPorvinceFirstLetter: null,
             pingyinSpellsData          : ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "W", "X", "Y", "Z"],
             pingyinData                : [],
@@ -26,6 +26,7 @@ define(["dojo/_base/declare",
             },
             postCreate                 : function () {
                 this.inherited(arguments);
+                this._selectPattern();
                 if (this.pingyinData.length === 0) {
                     array.forEach(myData, lang.hitch(this, function (item) {
                         array.forEach(item.citys, lang.hitch(this, function (city) {
@@ -33,7 +34,6 @@ define(["dojo/_base/declare",
                         }));
                     }));
                 }
-                this.showByProvince();
                 var self = this;
                 $(this.selCityCityWdselCityCityWd).autocomplete(this.pingyinData, {
                     max          : 10,    //列表里的条目数
@@ -71,11 +71,17 @@ define(["dojo/_base/declare",
             },
 
             _selectPattern: function (event) {
+                //debugger;
                 var className = "sel-city-btnl-sel";
                 domClass.remove(this.byRegionDom, className);
                 domClass.remove(this.byProvinceDom, className);
                 domClass.remove(this.byCityDom, className);
-                domClass.add(event.target, className);
+                if (event && event.target) {
+                    domClass.add(event.target, className);
+                } else {
+                    domClass.add(this.byProvinceDom, className);
+                }
+
                 if (domClass.contains(this.byRegionDom, className)) {
                     if (this.selectType !== "byRegion") {
                         this.showByRegion();
@@ -89,17 +95,12 @@ define(["dojo/_base/declare",
                         this.showByCitys();
                     }
                 }
-                var cityDoms = query("td.myProvinceCityesClass");
-                on(cityDoms, "click", lang.hitch(this, function (event) {
-                    this.selectedCity = event.path[0].innerText;
-                    console.info("当前选中的城市为:", this.selectedCity);
-                }));
+
+                this.bindSelect();
             },
 
             showByRegion  : function () {
                 domConstruct.empty(this.mytable);
-
-
                 this.selectType = "byRegion";
             },
             showByCitys   : function () {
@@ -121,7 +122,7 @@ define(["dojo/_base/declare",
                         "<td class='sel-city-td-letter'>" +
                         "<div>CITYSPELL</div>" +
                         "</td>" +
-                        "<td class='mycityesClass'>" +
+                        "<td class='mycityesClass myForQureyUse'>" +
                         "</td>" +
                         "</tr>" +
                         "<tr>" +
@@ -159,7 +160,7 @@ define(["dojo/_base/declare",
                         "<td class='sel-city-td-sf'>" +
                         "<a href='javascript:void(0)'>ProvinceName:</a>" +
                         "</td>" +
-                        "<td class='myProvinceCityesClass'>" +
+                        "<td class='myProvinceCityesClass myForQureyUse'>" +
                         "</td>" +
                         "</tr>" +
                         "<tr>" +
@@ -209,6 +210,25 @@ define(["dojo/_base/declare",
                     this.checkStyle();
                 }));
                 this.selectType  = "byProvince";
+            },
+
+            bindSelect: function () {
+                var cityDoms = query("td.myForQureyUse");
+                if (cityDoms.length === 0) {
+                    var myInterval = setInterval(this.bindSelect, 100);
+                } else {
+                    window.clearInterval(myInterval)
+                    if (this.cityClickListener) {
+                        this.cityClickListener.remove();
+                    }
+                    this.cityClickListener = on(cityDoms, "click", lang.hitch(this, function (evt) {
+                        if (evt.path[0].tagName === "A") {
+                            this.selectedCity = evt.path[0].innerText;
+                            console.info("当前选中的城市为:", this.selectedCity);
+                        }
+                    }));
+                }
+
             }
         });
     });

@@ -100,10 +100,10 @@ var myData = [
         citys       : [
             {name: "贵阳", pingyin: "guiyang"},
             {name: "安顺", pingyin: "anshun"},
-            {name: "毕节地区", pingyin: "bijiediqu"},
+            {name: "遵义", pingyin: "zunyi"},
             {name: "六盘水", pingyin: "liupanshui"},
             {name: "铜仁地区", pingyin: "tongrendiqu"},
-            {name: "遵义", pingyin: "zunyi"},
+            {name: "毕节地区", pingyin: "bijiediqu"},
             {name: "黔西南州", pingyin: "qianxinanzhou"},
             {name: "黔东南州", pingyin: "qiandongnanzhou"},
             {name: "黔南州", pingyin: "qiannanzhou"}
