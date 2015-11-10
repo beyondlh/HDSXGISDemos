@@ -26,7 +26,7 @@ var myData = [
     },
     {
         provinceName: "福建",
-        belong      : "",
+        belong      : "华北地区",
         code        : 5785,
         spel        : "F",
         citys       : [
@@ -43,7 +43,7 @@ var myData = [
     },
     {
         provinceName: "广东",
-        belong      : "",
+        belong      : "华北地区",
         code        : 5776,
         spel        : "G",
         citys       : [
@@ -72,7 +72,7 @@ var myData = [
     },
     {
         provinceName: "广西",
-        belong      : "",
+        belong      : "华南地区",
         code        : 5786,
         spel        : "G",
         citys       : [
@@ -94,7 +94,7 @@ var myData = [
     },
     {
         provinceName: "贵州",
-        belong      : "",
+        belong      : "华中地区",
         code        : 5793,
         spel        : "G",
         citys       : [
@@ -111,7 +111,7 @@ var myData = [
     },
     {
         provinceName: "甘肃",
-        belong      : "",
+        belong      : "华东地区",
         code        : 5775,
         spel        : "G",
         citys       : [
@@ -133,6 +133,7 @@ var myData = [
     },
     {
         provinceName: "海南",
+        belong      : "西北地区",
         code        : 5790,
         spel        : "H",
         citys       : [
@@ -157,6 +158,7 @@ var myData = [
     },
     {
         provinceName: "河南",
+        belong      : "西南地区",
         code        : 5799,
         spel        : "H",
         citys       : [
@@ -181,6 +183,7 @@ var myData = [
     },
     {
         provinceName: "黑龙江",
+        belong      : "东北地区",
         code        : 5771,
         spel        : "H",
         citys       : [
@@ -201,6 +204,7 @@ var myData = [
     },
     {
         provinceName: "湖北",
+        belong      : "东南地区",
         code        : 5794,
         spel        : "H",
         citys       : [
@@ -225,6 +229,7 @@ var myData = [
     },
     {
         provinceName: "湖南",
+        belong      : "东北地区",
         code        : 5794,
         spel        : "H",
         citys       : [
@@ -247,6 +252,7 @@ var myData = [
     },
     {
         provinceName: "河北",
+        belong      : "东南地区",
         code        : 5794,
         spel        : "H",
         citys       : [
@@ -265,6 +271,7 @@ var myData = [
     },
     {
         provinceName: "江苏",
+        belong      : "华东地区",
         code        : 5787,
         spel        : "J",
         citys       : [
@@ -284,6 +291,7 @@ var myData = [
     },
     {
         provinceName: "江西",
+        belong      : "西北地区",
         code        : 5800,
         spel        : "J",
         citys       : [
@@ -301,6 +309,7 @@ var myData = [
     },
     {
         provinceName: "吉林",
+        belong      : "西南地区",
         code        : 5800,
         spel        : "J",
         citys       : [
@@ -318,6 +327,7 @@ var myData = [
     },
     {
         provinceName: "辽宁",
+        belong      : "华东地区",
         code        : 5800,
         spel        : "L",
         citys       : [
@@ -339,6 +349,7 @@ var myData = [
     },
     {
         provinceName: "宁夏",
+        belong      : "西北地区",
         code        : 5800,
         spel        : "N",
         citys       : [
@@ -351,6 +362,7 @@ var myData = [
     },
     {
         provinceName: "内蒙古",
+        belong      : "西南地区",
         code        : 5800,
         spel        : "N",
         citys       : [
@@ -371,6 +383,7 @@ var myData = [
     },
     {
         provinceName: "青海",
+        belong      : "西南地区",
         code        : 5800,
         spel        : "Q",
         citys       : [
@@ -386,6 +399,7 @@ var myData = [
     },
     {
         provinceName: "山东",
+        belong      : "华北地区",
         code        : 5800,
         spel        : "S",
         citys       : [
@@ -410,6 +424,7 @@ var myData = [
     },
     {
         provinceName: "山西",
+        belong      : "华中地区",
         code        : 5800,
         spel        : "S",
         citys       : [
@@ -428,6 +443,7 @@ var myData = [
     },
     {
         provinceName: "陕西",
+        belong      : "华南地区",
         code        : 5800,
         spel        : "S",
         citys       : [
@@ -445,6 +461,7 @@ var myData = [
     },
     {
         provinceName: "四川",
+        belong      : "华南地区",
         code        : 5800,
         spel        : "S",
         citys       : [
@@ -472,6 +489,7 @@ var myData = [
     },
     {
         provinceName: "台湾",
+        belong      : "其他",
         code        : 5800,
         spel        : "T",
         citys       : [
@@ -487,6 +505,7 @@ var myData = [
     },
     {
         provinceName: "西藏",
+        belong      : "华南地区",
         code        : 5800,
         spel        : "X",
         citys       : [
@@ -501,6 +520,7 @@ var myData = [
     },
     {
         provinceName: "云南",
+        belong      : "西南地区",
         code        : 5800,
         spel        : "Y",
         citys       : [
@@ -523,6 +543,7 @@ var myData = [
     },
     {
         provinceName: "浙江",
+        belong      : "华南地区",
         code        : 5800,
         spel        : "Z",
         citys       : [
@@ -541,11 +562,12 @@ var myData = [
     },
     {
         provinceName: "其他",
+        belong      : "其他",
         code        : 5800,
         spel        : "Z",
         citys       : [
             {name: "香港", pingyin: "xianggang"},
             {name: "澳门", pingyin: "aomen"}
         ]
-    },
+    }
 ];

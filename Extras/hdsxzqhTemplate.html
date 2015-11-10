@@ -1,17 +1,15 @@
-<div class="map_popup " style="width: 300px; display: block; height: 369px; left: 96px; top: 0;">
+<div class="map_popup " style="width: 300px; display: block; height: 339px; left: 96px; top: 0;">
     <div class="popup_main">
-        <div class="content" style="height: 369px; overflow: hidden;">
+        <div class="content" style="height: 339px; overflow: hidden;">
             <div class="sel_city blueC">
                 <div id="selCityTop" style="_width:100%;">
                     <div class="sel_city_default" id="set_default_city" style="display: block;">
                         <p id="CurCityInfo">
                             <span>当前城市：信阳市</span>
                             <a class="def_city" style="display:inline;" href="javascript:void(0);"
-                               id="SetDefCity">设为默认城市</a></p>
-
-                        <p class="default_info" id="DefCityInfo" style="display:none;">您默认的城市是：<a
-                                href="javascript:void(0);">北京市</a><span>[<a
-                                href="javascript:void(0);">删除</a>]</span></p></div>
+                               id="SetDefCity">设为默认城市</a>
+                        </p>
+                    </div>
                     <div class="sel-city-searchbar">
                         <div class="btnbar">
                             <span href="javascript:void(0)" tid="selCityCity" id="selCityDQ"
@@ -48,51 +46,32 @@
                             <div id="selCityInfo" class="sel-city-tip">请输入正确的城市名</div>
                         </form>
                     </div>
-                    <div id="selCityLetterListId" class="sel-city-letterbar"><a href="javascript:void(0)">A</a>
-                        <a href="javascript:void(0)">F</a>
-                        <a href="javascript:void(0)">G</a>
-                        <a href="javascript:void(0)">H</a>
-                        <a href="javascript:void(0)">J</a>
-                        <a href="javascript:void(0)">L</a>
-                        <a href="javascript:void(0)">N</a>
-                        <a href="javascript:void(0)">Q</a>
-                        <a href="javascript:void(0)">S</a>
-                        <a href="javascript:void(0)">T</a>
-                        <a href="javascript:void(0)">X</a>
-                        <a href="javascript:void(0)">Y</a>
-                        <a href="javascript:void(0)">Z</a>
-                        <a href="javascript:void(0)">其它</a>
+                    <div id="selCityLetterListId" class="sel-city-letterbar" data-dojo-attach-point="selCityLetterBar">
                     </div>
                     <div style="border-top:1px solid #CCC;padding-bottom:10px;"></div>
                 </div>
-                <div id="tangram-scrollpanel--TANGRAM_241-main" class="tangram-scrollpanel-main" data-guid="TANGRAM_241"
-                     style="width: 290px;">
-                    <div id="tangram-scrollpanel--TANGRAM_241" class="tangram-scrollpanel">
-                        <div id="tangram-scrollpanel--TANGRAM_241-panel" class="tangram-scrollpanel-panel"
+                <div class="tangram-scrollpanel-main" style="width: 290px;">
+                    <div class="tangram-scrollpanel">
+                        <div class="tangram-scrollpanel-panel"
                              style="float: left;">
                             <div id="selCityPlaceListId" style="width: 281px; height: 185px; overflow: hidden;"
-                                 data-dojo-attach-point="mytable">
+                                 data-dojo-attach-point="mytableDom">
                             </div>
                         </div>
-                        <div id="tangram-scrollpanel--TANGRAM_241-overflow-y" class="tangram-scrollpanel-overflow-y"
-                             data-guid="TANGRAM_242" style="float: left; width: 9px; margin: 0px; height: 185px;">
-                            <div id="tangram-scrollbar--TANGRAM_242" class="tangram-scrollbar scrollbar-y"
-                                 data-guid="TANGRAM_251" style="display: block; background-position: 3px 0px;">
-                                <div id="tangram-button--TANGRAM_246"
-                                     class="tangram-scrollbar-prev scrollbar-y-prev"></div>
-                                <div id="tangram-scrollbar--TANGRAM_242-track"
-                                     class="tangram-scrollbar-track scrollbar-y-track" data-guid="TANGRAM_256"
+                        <div class="tangram-scrollpanel-overflow-y"
+                             style="float: left; width: 9px; margin: 0px; height: 185px;">
+                            <div class="tangram-scrollbar scrollbar-y"
+                                 style="display: block; background-position: 3px 0px;">
+                                <div class="tangram-scrollbar-prev scrollbar-y-prev"></div>
+                                <div class="tangram-scrollbar-track scrollbar-y-track"
                                      style="height: 185px;">
-                                    <div id="tangram-slider--TANGRAM_256"
-                                         data-dojo-attach-point="myScroolbarDom"
+                                    <div data-dojo-attach-point="myScroolbarDom"
                                          class="tangram-scrollbar-slider scrollbar-y-slider"
                                          style="position:relative;">
-                                        <div id="tangram-slider--TANGRAM_256-thumb"
-                                             data-dojo-attach-point="myScrollDom"
+                                        <div data-dojo-attach-point="myScrollDom"
                                              class="tangram-scrollbar-slider-thumb scrollbar-y-slider-thumb"
                                              style="position: absolute; top: 0px; height: 13%;" data-guid="TANGRAM_259">
-                                            <div id="tangram-button--TANGRAM_259"
-                                                 class="tangram-scrollbar-thumb-btn scrollbar-y-thumb-btn"
+                                            <div class="tangram-scrollbar-thumb-btn scrollbar-y-thumb-btn"
                                                  style="background-position: -12px 50%;">
                                                 <div class="tangram-scrollbar-thumb-prev scrollbar-y-thumb-prev"
                                                      style="background-position: -36px 0px;"></div>
@@ -103,8 +82,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="tangram-button--TANGRAM_251"
-                                     class="tangram-scrollbar-next scrollbar-y-next"></div>
+                                <div class="tangram-scrollbar-next scrollbar-y-next"></div>
                             </div>
                         </div>
                     </div>

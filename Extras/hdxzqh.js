@@ -24,6 +24,7 @@ define(["dojo/_base/declare",
             previousPorvinceFirstLetter: null,
             pingyinSpellsData          : ["A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "W", "X", "Y", "Z"],
             pingyinData                : [],
+            blongsData                 : [],
             matchCityes                : [],
             constructor                : function () {
             },
@@ -31,6 +32,7 @@ define(["dojo/_base/declare",
                 this.inherited(arguments);
                 this._selectPattern();
                 this._scrollHandler();
+                this._buildData();
                 this._bindAutoComplete();
             },
 
@@ -49,16 +51,34 @@ define(["dojo/_base/declare",
                 }
             },
 
+            _buildData: function () {
+                array.forEach(myData, lang.hitch(this, function (item) {
+                    this.pingyinData = this.pingyinData.concat(item.citys);
+                    var myLength     = this.blongsData.length;
+                    var bIn          = false;
+                    var myIndex      = -1;
+                    //debugger;
+                    for (var i = 0; i < myLength; i++) {
+                        if (this.blongsData[i]["key"] === item.belong) {
+                            bIn     = true;
+                            myIndex = i;
+                            break;
+                        }
+                    }
+                    if (bIn) {
+                        var dataTemp             = this.blongsData[myIndex];
+                        dataTemp.value           = dataTemp.value.concat(item.citys);
+                        this.blongsData[myIndex] = dataTemp;
+                    } else {
+                        var m   = {};
+                        m.key   = item.belong;
+                        m.value = item.citys;
+                        this.blongsData.push(m);
+                    }
+                }));
+            },
 
             _bindAutoComplete: function () {
-                if (this.pingyinData.length === 0) {
-                    array.forEach(myData, lang.hitch(this, function (item) {
-                        array.forEach(item.citys, lang.hitch(this, function (city) {
-                            this.pingyinData.push(city);
-                        }));
-                    }));
-                }
-
                 var self = this;
                 $(this.selCityCityWdselCityCityWd).autocomplete(this.pingyinData, {
                     max          : 10,    //列表里的条目数
@@ -110,7 +130,7 @@ define(["dojo/_base/declare",
 
                 this.bindSelect();
 
-                var myTable = query("table", this.mytable)[0];
+                var myTable = query("table", this.mytableDom)[0];
                 if (this.mousewheelListener) {
                     this.mousewheelListener.remove();
                 }
@@ -145,41 +165,73 @@ define(["dojo/_base/declare",
                 }));
 
                 //模拟滚动条的拖动
-                on(this.myScroolbarDom, "", lang.hitch(this, function () {
-
-                }));
+                //on(this.myScroolbarDom, "", lang.hitch(this, function () {
+                //
+                //}));
             },
 
 
             _scrollHandler: function () {
                 topic.subscribe("scrollTopChanged", lang.hitch(this, function () {
                     //显示的表格的高度
-                    var hei     = domStyle.get(this.mytable, "height");
-                    var myTable = query("table", this.mytable)[0];
+                    var hei     = domStyle.get(this.mytableDom, "height");
+                    var myTable = query("table", this.mytableDom)[0];
                     //得到当前table的高度
                     var myTableHeight = domStyle.get(myTable, "height");
-                    var bili          = (myTableHeight - hei) / this.scrollHeight;
+                    var scale         = (myTableHeight - hei) / this.scrollHeight;
                     var top2          = domStyle.get(this.myScrollDom, "top");
-                    domStyle.set(myTable, "top", -top2 * bili + "px");
+                    domStyle.set(myTable, "top", -top2 * scale + "px");
                 }));
             },
 
+            //按地区显示
             showByRegion: function () {
-                domConstruct.empty(this.mytable);
-                this.selectType = "byRegion";
+                domConstruct.empty(this.mytableDom);
+
+                var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody myRegionClass'></tbody></table>";
+                var myTable       = domConstruct.toDom(table);
+                var tbodyToInsert = query("tbody.myCitysXZQHtbody", myTable)[0];
+                domConstruct.place(myTable, this.mytableDom, "last");
+                domStyle.set(myTable, "position", "relative");
+                //区域模板
+                var tema           = "<a href='javascript:void(0)'></a>";
+                var templateRegion = domConstruct.toDom(tema);
+                //var temProvince = "<tr>" +
+                //    "<td class='sel-city-td-letter'>" +
+                //    "<div>CITYSPELL</div>" +
+                //    "</td>" +
+                //    "<td class='myCityesClass myForQureyUse'>" +
+                //    "</td>" +
+                //    "</tr>" +
+                //    "<tr>" +
+                //    "<td colspan='3'>" +
+                //    "<div class='sel-city-tr-splitline'>CITYSPELL</div></td>"
+                //    + "</tr>";
+                array.forEach(this.blongsData, lang.hitch(this, function (data) {
+                    var templateCityTemp       = lang.clone(templateRegion);
+                    templateCityTemp.innerHTML = data["key"];
+                    domConstruct.place(templateCityTemp, tbodyToInsert, "last");
+                }));
+                this.selectType    = "byRegion";
             },
 
             showByCitys   : function () {
-                domConstruct.empty(this.mytable);
+                domConstruct.empty(this.mytableDom);
+                domConstruct.empty(this.selCityLetterBar);
+
                 var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody'></tbody></table>";
                 var myTable       = domConstruct.toDom(table);
                 var tbodyToInsert = query("tbody.myCitysXZQHtbody", myTable)[0];
-                domConstruct.place(myTable, this.mytable, "last");
+                domConstruct.place(myTable, this.mytableDom, "last");
                 domStyle.set(myTable, "position", "relative");
                 //城市模板
                 var tema         = "<a href='javascript:void(0)'></a>";
                 var templateCity = domConstruct.toDom(tema);
                 array.forEach(this.pingyinSpellsData, lang.hitch(this, function (item, index) {
+                    var cityLetterBarLetter       = lang.clone(templateCity);
+                    cityLetterBarLetter.innerHTML = item;
+                    domConstruct.place(cityLetterBarLetter, this.selCityLetterBar, "last");
+
                     var matchCityes = array.filter(this.pingyinData, lang.hitch(this, function (city) {
                         return item === city.pingyin.charAt(0).toUpperCase();
                     }));
@@ -188,7 +240,7 @@ define(["dojo/_base/declare",
                         "<td class='sel-city-td-letter'>" +
                         "<div>CITYSPELL</div>" +
                         "</td>" +
-                        "<td class='mycityesClass myForQureyUse'>" +
+                        "<td class='myCityesClass myForQureyUse'>" +
                         "</td>" +
                         "</tr>" +
                         "<tr>" +
@@ -198,7 +250,7 @@ define(["dojo/_base/declare",
                     var temProvinceReplace = temProvince.replace("CITYSPELL", item);
                     var temProvinceDom     = domConstruct.toDom(temProvinceReplace);
                     domConstruct.place(temProvinceDom, tbodyToInsert, "last");
-                    var cityToInsertDom    = query("td.mycityesClass", myTable)[index];
+                    var cityToInsertDom    = query("td.myCityesClass", myTable)[index];
                     array.forEach(matchCityes, lang.hitch(this, function (city) {
                         var templateCityTemp       = lang.clone(templateCity);
                         templateCityTemp.innerHTML = city.name;
@@ -208,11 +260,13 @@ define(["dojo/_base/declare",
                 this.selectType  = "byCity";
             },
             showByProvince: function () {
-                domConstruct.empty(this.mytable);
+                domConstruct.empty(this.mytableDom);
+                domConstruct.empty(this.selCityLetterBar);
+
                 var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myProvinceXZQHtbody'></tbody></table>";
                 var myTable       = domConstruct.toDom(table);
                 var tbodyToInsert = query("tbody.myProvinceXZQHtbody", myTable)[0];
-                domConstruct.place(myTable, this.mytable, "last");
+                domConstruct.place(myTable, this.mytableDom, "last");
                 domStyle.set(myTable, "position", "relative");
                 //城市模板
                 var tema         = "<a href='javascript:void(0)'></a>";
@@ -235,6 +289,10 @@ define(["dojo/_base/declare",
                         + "</tr>";
                     if (this.previousPorvinceFirstLetter === item.spel) {
                         temProvince = temProvince.replace(provinceLetter, "");
+                    } else {
+                        var m = lang.clone(templateCity);
+                        m.innerHTML = item.spel;
+                        domConstruct.place(m, this.selCityLetterBar, "last");
                     }
                     this.previousPorvinceFirstLetter = item.spel;
                     var temProvinceReplace           = temProvince.replace("CITYSPELL", item.spel).replace("ProvinceName", item.provinceName);
@@ -247,6 +305,9 @@ define(["dojo/_base/declare",
                         domConstruct.place(templateCityTemp, cityToInsertDom, "last");
                     });
                 }));
+                var m = lang.clone(templateCity);
+                m.innerHTML = "其他";
+                domConstruct.place(m, this.selCityLetterBar, "last");
                 this.selectType  = "byProvince";
             },
 

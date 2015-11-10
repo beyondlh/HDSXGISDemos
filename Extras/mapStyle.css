@@ -41,14 +41,14 @@ a, input, select {
 }
 
 .scrollbar-y {
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 3px center;
+    background: url(../Extras/Resources/scroll.gif) no-repeat 3px center;
 }
 
 .scrollbar-y-prev {
     width: 9px;
     height: 0;
     overflow: hidden;
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 0 0;
+    background: url(../Extras/Resources/scroll.gif) no-repeat 0 0;
 }
 
 .tangram-scrollbar-track {
@@ -89,7 +89,6 @@ a, input, select {
     right: 6px;
     width: 12px;
     height: 12px;
-    background: url(http://webmap2.map.bdstatic.com/wolfman/static/common/images/popup_close_15d2283.gif) no-repeat;
     border: 0;
     cursor: pointer;
 }
@@ -101,7 +100,7 @@ a, input, select {
     left: 4px;
     top: 4px;
     z-index: 1;
-    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/pop_shadow_da3923f.png) no-repeat right bottom;
+    background: url(Resources/shadow.png) no-repeat right bottom;
     _left: 1px;
     _top: 1px;
     _background: #505050;
@@ -218,14 +217,14 @@ img, table {
 }
 
 .scrollbar-y {
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 3px center;
+    background: url(../Extras/Resources/scroll.gif) no-repeat 3px center;
 }
 
 .scrollbar-y-prev {
     width: 9px;
     height: 0;
     overflow: hidden;
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 0 0;
+    background: url(../Extras/Resources/scroll.gif) no-repeat 0 0;
 }
 
 .tangram-scrollbar-track {
@@ -238,26 +237,11 @@ img, table {
     width: 9px;
     height: 0;
     overflow: hidden;
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat 0 -15px;
+    background: url(../Extras/Resources/scroll.gif) no-repeat 0 -15px;
 }
 
 .tangram-scrollbar-prev, .tangram-scrollbar-next, .tangram-scrollbar-thumb-btn {
     font-size: 0;
-}
-
-.map_popup .poput_shadow {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 4px;
-    top: 4px;
-    z-index: 1;
-    background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/pop_shadow_da3923f.png) no-repeat right bottom;
-    _left: 1px;
-    _top: 1px;
-    _background: #505050;
-    _border: 1px solid #505050;
-    _filter: alpha(opacity=20);
 }
 
 .sug {
@@ -275,7 +259,7 @@ img, table {
     position: relative;
     width: 100%;
     height: 100%;
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) no-repeat -12px center;
+    background: url(../Extras/Resources/scroll.gif) no-repeat -12px center;
 }
 
 .tangram-scrollbar-prev, .tangram-scrollbar-next, .tangram-scrollbar-thumb-btn {
@@ -294,7 +278,7 @@ img, table {
     width: 100%;
     height: 4px;
     font-size: 0;
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) -36px 0;
+    background: url(../Extras/Resources/scroll.gif) -36px 0;
 }
 
 .scrollbar-y-thumb-next {
@@ -304,7 +288,7 @@ img, table {
     width: 100%;
     height: 4px;
     font-size: 0;
-    background: url(http://webmap0.map.bdstatic.com/wolfman/static/common/images/scroll-v_4e0cf9d.gif) -36px -4px;
+    background: url(../Extras/Resources/scroll.gif) -36px -4px;
 }
 
 .sel_city td.sel-city-td-letter {
@@ -357,6 +341,9 @@ img, table {
     white-space: normal;
 }
 
-.mycityesClass a {
+.myCityesClass a {
+    white-space: normal;
+}
+.myRegionClass a {
     white-space: normal;
 }
