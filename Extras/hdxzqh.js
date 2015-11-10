@@ -133,7 +133,34 @@ define(["dojo/_base/declare",
                 var myTable = query("table", this.mytableDom)[0];
                 if (this.mousewheelListener) {
                     this.mousewheelListener.remove();
+
                 }
+                //firefox兼容处理
+                myTable.removeEventListener("DOMMouseScroll",function(){
+
+                });
+                myTable.addEventListener("DOMMouseScroll",lang.hitch(this,function(e){
+                    //往上滚动，y值为负
+                    var top = domStyle.get(this.myScrollDom, "top");
+                    if (top == 0 && e.detail > 0) {
+                        domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
+                    } else if (top == 0 && e.detail < 0) {
+                        return;
+                    } else if (top == this.scrollHeight && e.detail < 0) {
+                        domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
+                    } else if (top == this.scrollHeight && e.detail > 0) {
+                        return;
+                    } else {
+                        if (e.detail < 0) {
+                            domStyle.set(this.myScrollDom, "top", top - this.scrollStep + "px");
+                        } else {
+                            domStyle.set(this.myScrollDom, "top", top + this.scrollStep + "px");
+                        }
+                    }
+                    this.checkStyle();
+                    topic.publish("scrollTopChanged", "");
+                }));
+
                 this.mousewheelListener = on(myTable, "mousewheel", lang.hitch(this, function (e) {
                     //往上滚动，y值为负
                     var top = domStyle.get(this.myScrollDom, "top");
@@ -187,8 +214,10 @@ define(["dojo/_base/declare",
             //按地区显示
             showByRegion: function () {
                 domConstruct.empty(this.mytableDom);
+                domConstruct.empty(this.selCityLetterBar);
+                domStyle.set(this.scrollbarParentDOM, "display", "none");
 
-                var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody myRegionClass'></tbody></table>";
+                var table         = "<table style='top: 30px; border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody myRegionClass'></tbody></table>";
                 var myTable       = domConstruct.toDom(table);
                 var tbodyToInsert = query("tbody.myCitysXZQHtbody", myTable)[0];
                 domConstruct.place(myTable, this.mytableDom, "last");
@@ -196,17 +225,6 @@ define(["dojo/_base/declare",
                 //区域模板
                 var tema           = "<a href='javascript:void(0)'></a>";
                 var templateRegion = domConstruct.toDom(tema);
-                //var temProvince = "<tr>" +
-                //    "<td class='sel-city-td-letter'>" +
-                //    "<div>CITYSPELL</div>" +
-                //    "</td>" +
-                //    "<td class='myCityesClass myForQureyUse'>" +
-                //    "</td>" +
-                //    "</tr>" +
-                //    "<tr>" +
-                //    "<td colspan='3'>" +
-                //    "<div class='sel-city-tr-splitline'>CITYSPELL</div></td>"
-                //    + "</tr>";
                 array.forEach(this.blongsData, lang.hitch(this, function (data) {
                     var templateCityTemp       = lang.clone(templateRegion);
                     templateCityTemp.innerHTML = data["key"];
@@ -290,7 +308,7 @@ define(["dojo/_base/declare",
                     if (this.previousPorvinceFirstLetter === item.spel) {
                         temProvince = temProvince.replace(provinceLetter, "");
                     } else {
-                        var m = lang.clone(templateCity);
+                        var m       = lang.clone(templateCity);
                         m.innerHTML = item.spel;
                         domConstruct.place(m, this.selCityLetterBar, "last");
                     }
@@ -305,8 +323,8 @@ define(["dojo/_base/declare",
                         domConstruct.place(templateCityTemp, cityToInsertDom, "last");
                     });
                 }));
-                var m = lang.clone(templateCity);
-                m.innerHTML = "其他";
+                var m            = lang.clone(templateCity);
+                m.innerHTML      = "其他";
                 domConstruct.place(m, this.selCityLetterBar, "last");
                 this.selectType  = "byProvince";
             },
@@ -330,10 +348,15 @@ define(["dojo/_base/declare",
                         this.cityClickListener.remove();
                     }
                     this.cityClickListener = on(objDom, "click", lang.hitch(this, function (evt) {
-                        if (evt.path[0].tagName === "A") {
+                        //谷歌
+                        if (evt.path && evt.path[0].tagName === "A") {
                             this.selectedCity = evt.path[0].innerText;
-                            console.info("当前选中的城市为:", this.selectedCity);
+
+                        } else {
+                            //火狐
+                            this.selectedCity = evt.explicitOriginalTarget.nodeValue;
                         }
+                        console.info("当前选中的城市为:", this.selectedCity);
                     }));
                 }));
 

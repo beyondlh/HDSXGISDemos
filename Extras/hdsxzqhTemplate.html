@@ -1,15 +1,44 @@
-<div class="map_popup " style="width: 300px; display: block; height: 339px; left: 96px; top: 0;">
+<div class="map_popup " style="width: 300px; display: block; height: 369px; left: 96px; top: 0;">
     <div class="popup_main">
-        <div class="content" style="height: 339px; overflow: hidden;">
+        <div class="content" style="height: 369px; overflow: hidden;">
             <div class="sel_city blueC">
                 <div id="selCityTop" style="_width:100%;">
-                    <div class="sel_city_default" id="set_default_city" style="display: block;">
-                        <p id="CurCityInfo">
-                            <span>当前城市：信阳市</span>
-                            <a class="def_city" style="display:inline;" href="javascript:void(0);"
-                               id="SetDefCity">设为默认城市</a>
-                        </p>
+
+                    <div class="sel_city_default" id="set_default_city" style="display: block;"><p id="CurCityInfo">
+                        <span>当前城市：北京市</span><a class="def_city" style="display:inline;" href="javascript:void(0);"
+                                                onclick="SelectCityInst.setDefCity('北京市',this,1);return false;"
+                                                id="SetDefCity">设为默认城市</a></p>
+
+                        <p class="default_info" id="DefCityInfo" style="display:none;">您默认的城市是：<a
+                                href="javascript:void(0);"
+                                onclick="SelectCityInst.selDefCity('131','北京市');return false;">北京市</a><span>[<a
+                                href="javascript:void(0);"
+                                onclick="SelectCityInst.delDefCity('北京市');return false;">删除</a>]</span></p></div>
+
+
+                    <div id="selCityHotCityId" class="sel-city-hotcity"><a href="javascript:void(0)" name="全国"
+                                                                           style="font-weight:bold;margin-right:5px">全国</a>
+                        <a href="javascript:void(0)" citycode="131" name="北京"
+                           style="margin-right:5px;*margin-right:1px;">北京</a>
+                        <a href="javascript:void(0)" citycode="289" name="上海"
+                           style="margin-right:5px;*margin-right:1px;">上海</a>
+                        <a href="javascript:void(0)" citycode="257" name="广州"
+                           style="margin-right:5px;*margin-right:1px;">广州</a>
+                        <a href="javascript:void(0)" citycode="340" name="深圳"
+                           style="margin-right:5px;*margin-right:1px;">深圳</a>
+                        <a href="javascript:void(0)" citycode="75" name="成都"
+                           style="margin-right:5px;*margin-right:1px;">成都</a>
+                        <a href="javascript:void(0)" citycode="332" name="天津"
+                           style="margin-right:5px;*margin-right:1px;">天津</a>
+                        <a href="javascript:void(0)" citycode="315" name="南京"
+                           style="margin-right:5px;*margin-right:1px;">南京</a>
+                        <a href="javascript:void(0)" citycode="179" name="杭州"
+                           style="margin-right:5px;*margin-right:1px;">杭州</a>
+                        <a href="javascript:void(0)" citycode="218" name="武汉"
+                           style="margin-right:5px;*margin-right:1px;">武汉</a>
                     </div>
+
+
                     <div class="sel-city-searchbar">
                         <div class="btnbar">
                             <span href="javascript:void(0)" tid="selCityCity" id="selCityDQ"
@@ -64,6 +93,7 @@
                                  style="display: block; background-position: 3px 0px;">
                                 <div class="tangram-scrollbar-prev scrollbar-y-prev"></div>
                                 <div class="tangram-scrollbar-track scrollbar-y-track"
+                                     data-dojo-attach-point="scrollbarParentDOM"
                                      style="height: 185px;">
                                     <div data-dojo-attach-point="myScroolbarDom"
                                          class="tangram-scrollbar-slider scrollbar-y-slider"
