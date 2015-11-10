@@ -30,10 +30,12 @@ define(["dojo/_base/declare",
             },
             postCreate                 : function () {
                 this.inherited(arguments);
+
                 this._selectPattern();
                 this._scrollHandler();
                 this._buildData();
                 this._bindAutoComplete();
+                this.showByRegion();
             },
 
             startup: function () {
@@ -105,7 +107,6 @@ define(["dojo/_base/declare",
             _selectPattern: function (event) {
                 domStyle.set(this.myScrollDom, "top", "0px");
                 var className = "sel-city-btnl-sel";
-                domClass.remove(this.byRegionDom, className);
                 domClass.remove(this.byProvinceDom, className);
                 domClass.remove(this.byCityDom, className);
                 if (event && event.target) {
@@ -114,11 +115,7 @@ define(["dojo/_base/declare",
                     domClass.add(this.byProvinceDom, className);
                 }
 
-                if (domClass.contains(this.byRegionDom, className)) {
-                    if (this.selectType !== "byRegion") {
-                        this.showByRegion();
-                    }
-                } else if (domClass.contains(this.byProvinceDom, className)) {
+                if (domClass.contains(this.byProvinceDom, className)) {
                     if (this.selectType !== "byProvince") {
                         this.showByProvince();
                     }
@@ -136,10 +133,10 @@ define(["dojo/_base/declare",
 
                 }
                 //firefox兼容处理
-                myTable.removeEventListener("DOMMouseScroll",function(){
+                myTable.removeEventListener("DOMMouseScroll", function () {
 
                 });
-                myTable.addEventListener("DOMMouseScroll",lang.hitch(this,function(e){
+                myTable.addEventListener("DOMMouseScroll", lang.hitch(this, function (e) {
                     //往上滚动，y值为负
                     var top = domStyle.get(this.myScrollDom, "top");
                     if (top == 0 && e.detail > 0) {
@@ -213,14 +210,11 @@ define(["dojo/_base/declare",
 
             //按地区显示
             showByRegion: function () {
-                domConstruct.empty(this.mytableDom);
-                domConstruct.empty(this.selCityLetterBar);
-                domStyle.set(this.scrollbarParentDOM, "display", "none");
-
-                var table         = "<table style='top: 30px; border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody myRegionClass'></tbody></table>";
+                //domConstruct.empty(this.regionDom);
+                var table         = "<table style='border-collapse:collapse;border-spacing:0;' cellpadding='0' cellspacing='0'><tbody class='myCitysXZQHtbody myRegionClass'></tbody></table>";
                 var myTable       = domConstruct.toDom(table);
                 var tbodyToInsert = query("tbody.myCitysXZQHtbody", myTable)[0];
-                domConstruct.place(myTable, this.mytableDom, "last");
+                domConstruct.place(myTable, this.regionDom, "last");
                 domStyle.set(myTable, "position", "relative");
                 //区域模板
                 var tema           = "<a href='javascript:void(0)'></a>";

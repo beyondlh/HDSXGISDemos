@@ -1,19 +1,19 @@
-<div class="map_popup " style="width: 300px; display: block; height: 369px; left: 96px; top: 0;">
+<div class="map_popup " style="width: 300px; display: block; height: 420px; left: 96px; top: 0;">
     <div class="popup_main">
-        <div class="content" style="height: 369px; overflow: hidden;">
+        <div class="content" style="height: 420px; overflow: hidden;">
             <div class="sel_city blueC">
                 <div id="selCityTop" style="_width:100%;">
 
-                    <div class="sel_city_default" id="set_default_city" style="display: block;"><p id="CurCityInfo">
-                        <span>当前城市：北京市</span><a class="def_city" style="display:inline;" href="javascript:void(0);"
-                                                onclick="SelectCityInst.setDefCity('北京市',this,1);return false;"
-                                                id="SetDefCity">设为默认城市</a></p>
-
-                        <p class="default_info" id="DefCityInfo" style="display:none;">您默认的城市是：<a
-                                href="javascript:void(0);"
-                                onclick="SelectCityInst.selDefCity('131','北京市');return false;">北京市</a><span>[<a
-                                href="javascript:void(0);"
-                                onclick="SelectCityInst.delDefCity('北京市');return false;">删除</a>]</span></p></div>
+                    <div class="sel_city_default" id="set_default_city"
+                         data-dojo-attach-point="regionDom"
+                         style="display: block;">
+                        <p id="CurCityInfo">
+                            <span style="font-weight:bold;color: #3d6dcc">全国</span>
+                            <a class="def_city" style="display:inline; margin-left: 170px"
+                               href="javascript:void(0);"
+                               id="SetDefCity">设为默认城市</a>
+                        </p>
+                    </div>
 
 
                     <div id="selCityHotCityId" class="sel-city-hotcity"><a href="javascript:void(0)" name="全国"
@@ -41,12 +41,6 @@
 
                     <div class="sel-city-searchbar">
                         <div class="btnbar">
-                            <span href="javascript:void(0)" tid="selCityCity" id="selCityDQ"
-                                  data-dojo-attach-event="onclick:_selectPattern"
-                                  data-dojo-attach-point="byRegionDom"
-                                  class="sel-city-btnl sel-city-btnl-sel">
-                                按地区
-                            </span>
                             <span href="javascript:void(0)" tid="selCityProvince" id="selCityProvince"
                                   data-dojo-attach-point="byProvinceDom"
                                   data-dojo-attach-event="onclick:_selectPattern"

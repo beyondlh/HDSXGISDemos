@@ -144,7 +144,6 @@ a, input, select {
     float: left;
     /*width: 108px;*/
     height: 23px;
-    /*background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll;*/
     background-position: -302px 0;
 }
 
@@ -165,13 +164,13 @@ a, input, select {
     margin-left: 0;
     text-align: center;
     cursor: pointer;
-    /*background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -1300px -1000px;*/
 }
 
 .sel-city-searchinput {
+    margin-left: 50px;
     border: 1px solid #ccc;
     height: 20px;
-    width: 61px;
+    width: 80px;
     float: left;
     line-height: 20px;
     text-indent: 4px;
@@ -179,7 +178,6 @@ a, input, select {
 
 .sel-city-btn-submit {
     float: left;
-    /*background: url(http://webmap1.map.bdstatic.com/wolfman/static/common/images/index_a2f1ac4.png) no-repeat scroll -302px -98px;*/
     height: 24px;
     line-height: 24px;
     width: 48px;
@@ -202,7 +200,7 @@ a, input, select {
     display: none;
 }
 
-.sel-city-letterbar {
+.sel-city-searchinput {
     margin: 0 11px 10px;
 }
 
@@ -331,7 +329,7 @@ img, table {
     line-height: 18px;
 }
 
-/*Òş²ØĞ¡µÄ×Ö·û*/
+/*éšè—å°çš„å­—ç¬¦*/
 .sel-city-tr-splitline {
     height: 12px;
     visibility: hidden;
@@ -346,6 +344,4 @@ img, table {
 }
 .myRegionClass a {
     white-space: normal;
-    margin: 25px 5px 25px 30px;
-    line-height: 50PX;
 }
